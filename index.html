@@ -35,27 +35,27 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap');
 /* ══ TOOLBAR ══ */
-#tb{flex-shrink:0;height:210px;background:var(--surf2);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px)}
+#tb{flex-shrink:0;height:220px;background:var(--surf2);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);display:flex;flex-direction:column;padding-bottom:max(env(safe-area-inset-bottom,0px),50px)}
 .ttabs{height:40px;flex-shrink:0;display:flex;border-bottom:1px solid var(--bdr)}
 .tbtn{flex:1;padding:0 2px;background:none;border:none;color:var(--text-d);font-family:'Cinzel',serif;font-size:.65rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;text-transform:uppercase;border-bottom:2px solid transparent;margin-bottom:-1px;height:100%}
 .tbtn.on{color:var(--gold);border-bottom-color:var(--gold)}
 .tbtn:hover{color:var(--text)}
-.tpanel{display:none;height:170px;overflow:hidden}
+.tpanel{display:none;height:180px;overflow:hidden}
 .tpanel.on{display:block}
-.panel-scroll{height:170px;overflow-y:auto;overflow-x:hidden;padding:8px 12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.panel-scroll{height:180px;overflow-y:auto;overflow-x:hidden;padding:6px 12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .panel-scroll::-webkit-scrollbar{width:3px}
 .panel-scroll::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 
 /* ══ CATEGORY PILLS ══ */
-.cats{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;flex-shrink:0;padding:8px 10px;scrollbar-width:none;align-items:center;height:40px;min-height:40px}
+.cats{display:flex;gap:5px;overflow-x:auto;overflow-y:hidden;flex-shrink:0;padding:0 10px;scrollbar-width:none;align-items:center;height:36px;min-height:36px}
 .cats::-webkit-scrollbar{display:none}
 .cpill{flex-shrink:0;padding:4px 11px;border-radius:20px;border:1px solid var(--bdr);background:rgba(255,255,255,.04);color:var(--text-d);font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.07em;cursor:pointer;transition:all .2s;white-space:nowrap}
 .cpill.on,.cpill:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-g)}
 
 /* ══ OBJECTS PANEL — horizontal scroll ══ */
-#tp-objects{display:none;height:170px;flex-direction:column}
+#tp-objects{display:none;height:180px;flex-direction:column}
 #tp-objects.on{display:flex}
-.ogrid{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;padding:8px 10px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;align-items:center;flex:1;min-height:0;min-width:0;touch-action:pan-x}
+.ogrid{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;padding:4px 10px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;align-items:center;flex:1;min-height:0;min-width:0;touch-action:pan-x}
 
 /* ══ OBJECT TILES ══ */
 .otile{width:54px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:3px 2px;border-radius:9px;border:1px solid transparent;background:rgba(255,255,255,.04);transition:all .2s}
