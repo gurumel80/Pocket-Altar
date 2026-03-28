@@ -498,7 +498,7 @@ body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide
 // ════════════════════════════════════════════
 //  SVG CONSTRUCTION HELPERS
 // ════════════════════════════════════════════
-const SV=(c,v='0 0 44 44')=>`<svg viewBox="${v}" xmlns="http://www.w3.org/2000/svg">${c}</svg>`;
+const SV=(c,v='0 0 44 44')=>`<svg viewBox="${v}" width="44" height="44" xmlns="http://www.w3.org/2000/svg">${c}</svg>`;
 const CANDLE=c=>`__C__${c}`;
 const INC='__I__';
 
@@ -1571,7 +1571,7 @@ function initParticles(){const pc=document.getElementById('ptcl');for(let i=0;i<
 function renderIcon(obj){
   if(!obj)return'';
   if(obj.render===INC)return`<div class="incwrap" style="height:34px;display:flex;align-items:flex-end"><div class="sm1"></div><div class="sm2"></div><svg viewBox="0 0 44 44" width="34" height="34"><line x1="22" y1="40" x2="22" y2="8" stroke="#7a5020" stroke-width="2.8" stroke-linecap="round"/><circle cx="22" cy="8" r="3" fill="#e0b84a" opacity=".8"/><line x1="14" y1="40" x2="30" y2="40" stroke="#5a3010" stroke-width="2"/></svg></div>`;
-  if(typeof obj.render==='string'&&obj.render.startsWith('__C__')){const col=obj.render.replace('__C__','');return`<div class="cw"><div class="fl"></div><svg viewBox="0 0 22 38" width="18" height="30"><rect x="5" y="1" width="12" height="33" rx="2" fill="${col}" stroke="rgba(0,0,0,.22)" stroke-width=".6"/><rect x="7" y="3" width="4.5" height="29" rx="1" fill="rgba(255,255,255,.12)"/></svg></div>`;}
+  if(typeof obj.render==='string'&&obj.render.startsWith('__C__')){const col=obj.render.replace('__C__','');return`<div class="cw" style="height:44px;justify-content:flex-end;padding-bottom:2px"><div class="fl"></div><svg viewBox="0 0 22 38" width="18" height="30"><rect x="5" y="1" width="12" height="33" rx="2" fill="${col}" stroke="rgba(0,0,0,.22)" stroke-width=".6"/><rect x="7" y="3" width="4.5" height="29" rx="1" fill="rgba(255,255,255,.12)"/></svg></div>`;}
   if(obj.type==='custom'||obj.cat==='custom')return`<img src="${obj.src}" style="width:34px;height:34px;object-fit:cover;border-radius:8px;">`;
   return obj.render||'';
 }
@@ -1606,7 +1606,7 @@ function zpPlace(zone){
 function dzo(e){e.preventDefault();e.currentTarget.classList.add('dov');}
 function dzl(e){e.currentTarget.classList.remove('dov');}
 function dzd(e,z){e.preventDefault();e.currentTarget.classList.remove('dov');if(pendId){place(pendId,z);pendId=null;}}
-function dzc(z){if(pendId){place(pendId,z);pendId=null;}}
+function dzc(z){if(pendId){place(pendId,z);pendId=null;closeM('zone-pick');}}
 
 // ════════════════════════════════════════════
 //  PLACE / ZONES
@@ -1617,6 +1617,11 @@ function place(id,zone){
   if(ST.zones[zone].length>=lim)ST.zones[zone].shift();
   const obj=allObjs().find(o=>o.id===id);
   ST.zones[zone].push(obj?.type==='custom'||obj?.cat==='custom'?{id,type:'custom',src:obj.src}:{id,type:'object'});
+  // Show candle colour tip
+  if(obj&&typeof obj.render==='string'&&obj.render.startsWith('__C__')){
+    const col=obj.render.replace('__C__','');
+    if(CANDLE_TIPS[col])showTip(CANDLE_TIPS[col],5000);
+  }
   renderZones();svSt();ping();
 }
 function renderZones(){
@@ -1631,8 +1636,18 @@ function renderZone(zone,cont){
     const obj=allObjs().find(o=>o.id===item.id);
     const wrap=document.createElement('div');wrap.className='pi';
     wrap.style.setProperty('--fd',`${2.5+i*.6}s`);wrap.style.setProperty('--fdl',`${i*.4}s`);
-    if(item.type==='image'||item.type==='custom'){const img=document.createElement('img');img.src=item.src;wrap.appendChild(img);}
-    else if(obj){wrap.innerHTML=renderIcon(obj);}
+    if(item.type==='image'||item.type==='custom'){
+      const img=document.createElement('img');img.src=item.src;wrap.appendChild(img);
+    } else if(obj){
+      let svg=renderIcon(obj);
+      if(typeof svg==='string'&&svg.length>0){
+        // Unique-ify SVG gradient IDs to prevent clashes between multiple placed objects
+        const uid=`z${zone}${i}`;
+        svg=svg.replace(/\bid="([^"]+)"/g,(_,id)=>`id="${uid}_${id}"`);
+        svg=svg.replace(/url\(#([^)]+)\)/g,(_,id)=>`url(#${uid}_${id})`);
+        wrap.innerHTML=svg;
+      }
+    }
     const rm=document.createElement('button');rm.className='rx';rm.textContent='×';
     rm.onclick=e=>{e.stopPropagation();ST.zones[zone].splice(i,1);renderZones();svSt();};
     wrap.appendChild(rm);cont.appendChild(wrap);
@@ -1649,7 +1664,11 @@ function applyDirs(){['N','E','S','W'].forEach(d=>{const c=ST.dirs[d]||{};const 
 // ════════════════════════════════════════════
 //  MODAL / NAME
 // ════════════════════════════════════════════
-function openM(id){if(id==='name')document.getElementById('ni').value=ST.altarName;document.getElementById('m-'+id).classList.add('open');}
+function openM(id){
+  if(id==='name')document.getElementById('ni').value=ST.altarName;
+  document.getElementById('m-'+id).classList.add('open');
+  if(id==='settings'){renderLunar();setInterval(renderLunar,60000);}
+}
 function closeM(id){document.getElementById('m-'+id).classList.remove('open');}
 function saveN(){const v=document.getElementById('ni').value.trim();if(v){ST.altarName=v;document.getElementById('aname').textContent=`~ ${v} ~`;svSt();}closeM('name');}
 
@@ -2032,27 +2051,6 @@ function offerRitualNote(){
   if(el){el.value=(el.value+entry).trim();ST.notes=el.value;svSt();}
 }
 
-// ── Patch place() to show candle tips and log tarot ──
-const _origPlace=place;
-place=function(id,zone){
-  _origPlace(id,zone);
-  const obj=allObjs().find(o=>o.id===id);
-  if(obj){
-    if(typeof obj.render==='string'&&obj.render.startsWith('__C__')){
-      const col=obj.render.replace('__C__','');
-      if(CANDLE_TIPS[col])showTip(CANDLE_TIPS[col],5000);
-    }
-    
-  }
-};
-
-// ── Patch openM to load settings panel data ──
-const _origOpenM=openM;
-openM=function(id){
-  _origOpenM(id);
-  if(id==='settings'){renderLunar();setInterval(renderLunar,60000);}
-  
-};
 
 
 ldSt();applyBd();initParticles();initStars();
