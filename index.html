@@ -1,0 +1,2032 @@
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║                        POCKET ALTAR                            ║
+  ║              Your Ritual Space, Wherever You Are                   ║
+  ╠══════════════════════════════════════════════════════════════════╣
+  ║  Copyright © 2025. All rights reserved.                         ║
+  ║                                                                  ║
+  ║  LICENCE                                                         ║
+  ║  Personal, non-commercial use only. You may not redistribute,   ║
+  ║  resell, sublicense, or incorporate this software or any         ║
+  ║  portion of it into another product without written permission.  ║
+  ║                                                                  ║
+  ║  CONTENT                                                         ║
+  ║  All SVG symbols, animations, soundscapes, and code in this      ║
+  ║  file are original works. Traditional pagan symbols are in the   ║
+  ║  public domain; their specific rendering here is proprietary.    ║
+  ║  Rider-Waite tarot imagery is in the public domain (pre-1924).  ║
+  ║                                                                  ║
+  ║  PRIVACY                                                         ║
+  ║  This application runs entirely in the browser. No data is       ║
+  ║  transmitted to any server. All altar state is stored locally    ║
+  ║  in your browser's localStorage and never leaves your device.    ║
+  ║                                                                  ║
+  ║  NO WARRANTIES                                                   ║
+  ║  Provided as-is. No warranty of fitness for any purpose.        ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; connect-src 'none';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Pocket Altar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap');
+:root{
+  --gold:#e0b84a; --gold-d:rgba(224,184,74,.35); --gold-g:rgba(224,184,74,.12);
+  --gold-hi:rgba(224,184,74,.55); --text:#f0e4c0; --text-d:#9a8a60;
+  --surf:rgba(8,6,2,.85); --surf2:rgba(18,13,5,.94);
+  --bdr:rgba(224,184,74,.2); --bdr-hi:rgba(224,184,74,.55);
+  --red:#e04040; --teal:#50c8a8; --purple:#a060e0;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Cormorant Garamond',serif;font-size:18px;overflow:hidden;background:#000;color:var(--text)}
+#bdc{position:fixed;inset:0;z-index:0;width:100%;height:100%}
+#sf{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 2s}
+#sf.on{opacity:1}
+.star{position:absolute;border-radius:50%;background:white;animation:twk var(--d,3s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes twk{0%,100%{opacity:var(--lo,.08)}50%{opacity:var(--hi,.75)}}
+#ptcl{position:fixed;inset:0;z-index:2;pointer-events:none}
+.mote{position:absolute;border-radius:50%;background:radial-gradient(circle,var(--gold) 0%,transparent 70%);animation:mote var(--d,8s) ease-in-out infinite;animation-delay:var(--dl,0s);opacity:0}
+@keyframes mote{0%{transform:translate(0,0) scale(.5);opacity:0}30%{opacity:var(--op,.25)}70%{opacity:var(--op,.25)}100%{transform:translate(var(--tx,0px),-55px) scale(1.1);opacity:0}}
+#app{position:relative;z-index:3;height:100vh;display:flex;flex-direction:column;min-height:0}
+header{padding:11px 15px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);background:var(--surf2);backdrop-filter:blur(12px);flex-shrink:0}
+.atitle{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;letter-spacing:.22em;color:var(--gold);text-shadow:0 0 18px var(--gold-d)}
+.asub{font-size:.92rem;color:var(--text-d);font-style:italic;cursor:pointer;transition:color .2s}
+.asub:hover{color:var(--gold)}
+.hdr-r{display:flex;align-items:center;gap:10px}
+#moon{font-size:1.4rem;opacity:.8}
+.ibtn{background:none;border:none;cursor:pointer;padding:5px;font-size:1rem;color:var(--text-d);transition:color .2s;line-height:1;font-family:'Cinzel',serif;letter-spacing:.05em}
+.ibtn:hover{color:var(--gold)}
+
+/* ── ALTAR AREA ── */
+#aa{flex:1;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden;min-height:0;min-width:0}
+#altar{position:relative;width:min(88vw,490px);height:min(88vw,490px)}
+.ring-o{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(224,184,74,.25);box-shadow:0 0 60px rgba(224,184,74,.08),inset 0 0 60px rgba(224,184,74,.05);animation:breathe 8s ease-in-out infinite}
+.ring-i{position:absolute;inset:6%;border-radius:50%;border:1px solid rgba(224,184,74,.1)}
+@keyframes breathe{0%,100%{box-shadow:0 0 60px rgba(224,184,74,.08),inset 0 0 60px rgba(224,184,74,.05)}50%{box-shadow:0 0 100px rgba(224,184,74,.18),inset 0 0 100px rgba(224,184,74,.1)}}
+.cross{position:absolute;inset:0;pointer-events:none}
+.cross::before,.cross::after{content:'';position:absolute;background:rgba(224,184,74,.07)}
+.cross::before{width:100%;height:1px;top:50%;transform:translateY(-50%)}
+.cross::after{height:100%;width:1px;left:50%;transform:translateX(-50%)}
+#penta{position:absolute;inset:22%;pointer-events:none;opacity:.1;transition:opacity .5s}
+#penta.hidden{opacity:0}
+
+/* ── CARDINAL ZONES ── */
+.dz{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:all .25s;border-radius:50%;width:116px;height:116px;border:1.5px solid transparent}
+.dz:hover{border-color:var(--bdr-hi);background:var(--gold-g)}
+.dz.dov,.dz.pt{border-color:var(--gold);background:rgba(224,184,74,.09);box-shadow:0 0 20px var(--gold-d);animation:ptpls 1.2s ease-in-out infinite}
+@keyframes ptpls{0%,100%{box-shadow:0 0 14px var(--gold-d)}50%{box-shadow:0 0 30px rgba(224,184,74,.45)}}
+.dz-N{top:0;left:50%;transform:translateX(-50%)}
+.dz-E{right:0;top:50%;transform:translateY(-50%)}
+.dz-S{bottom:0;left:50%;transform:translateX(-50%)}
+.dz-W{left:0;top:50%;transform:translateY(-50%)}
+.dl{font-family:'Cinzel',serif;font-size:1.25rem;font-weight:700;color:var(--gold);text-shadow:0 0 10px var(--gold-d);line-height:1}
+.dn{font-size:.72rem;color:var(--text);font-family:'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.de{font-size:.64rem;color:var(--text-d);font-style:italic}
+body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide-labels .iql{opacity:0!important}
+.zo{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:106px}
+
+/* ── INTER-CARDINAL ── */
+.iqz{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;transition:all .25s;border-radius:50%;width:76px;height:76px;border:1px solid transparent}
+.iqz:hover{border-color:var(--bdr-hi);background:var(--gold-g)}
+.iqz.dov,.iqz.pt{border-color:var(--gold);box-shadow:0 0 14px var(--gold-d);animation:ptpls 1.2s ease-in-out infinite}
+.iqz-NE{top:10%;right:10%}.iqz-SE{bottom:10%;right:10%}
+.iqz-SW{bottom:10%;left:10%}.iqz-NW{top:10%;left:10%}
+.iql{font-family:'Cinzel',serif;font-size:.52rem;color:var(--text-d);letter-spacing:.08em}
+.iqo{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:68px}
+
+/* ── CENTER ── */
+#cz{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:145px;height:145px;border-radius:50%;border:1.5px solid rgba(224,184,74,.18);background:radial-gradient(circle,rgba(224,184,74,.05) 0%,transparent 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:all .3s}
+#cz:hover{border-color:var(--bdr-hi);box-shadow:0 0 45px rgba(224,184,74,.1)}
+#cz.dov,#cz.pt{border-color:var(--gold);box-shadow:0 0 50px rgba(224,184,74,.25);animation:ptpls 1.2s ease-in-out infinite}
+.chint{font-family:'Cinzel',serif;font-size:.56rem;letter-spacing:.28em;color:var(--text-d);text-transform:uppercase}
+#czo{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;max-width:124px}
+
+/* ── INTENTION ── */
+#iw{flex-shrink:0;padding:7px 13px;border-top:1px solid var(--bdr);background:var(--surf2);backdrop-filter:blur(10px)}
+#ii{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:8px;color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;padding:8px 13px;outline:none;letter-spacing:.04em;text-align:center;transition:border-color .3s,box-shadow .3s;caret-color:var(--gold)}
+#ii:focus{border-color:var(--bdr-hi);box-shadow:0 0 20px var(--gold-g)}
+#ii::placeholder{color:var(--text-d);font-style:italic}
+
+/* ── TOOLBAR ── */
+#tb{flex-shrink:0;background:var(--surf2);backdrop-filter:blur(14px);border-top:1px solid var(--bdr);display:flex;flex-direction:column;height:265px}
+.ttabs{display:flex;border-bottom:1px solid var(--bdr);flex-shrink:0;height:42px}
+.tbtn{flex:1;padding:0 2px;background:none;border:none;color:var(--text-d);font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;text-transform:uppercase;border-bottom:2px solid transparent;margin-bottom:-1px;height:100%}
+.tbtn.on{color:var(--gold);border-bottom-color:var(--gold)}
+.tbtn:hover{color:var(--text)}
+/* Panels: fill exactly the remaining toolbar height after the tab row */
+.tpanel{display:none;height:223px;overflow:hidden}
+.tpanel.on{display:block}
+.panel-scroll{height:100%;overflow-y:scroll;padding:10px 12px 12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.panel-scroll::-webkit-scrollbar{width:3px}
+.panel-scroll::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
+
+/* ── CATS ── */
+.cats{display:flex;gap:5px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;flex-shrink:0;padding-left:1px;padding-right:1px}
+.cats::-webkit-scrollbar{display:none}
+.cpill{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1px solid var(--bdr);background:rgba(255,255,255,.04);color:var(--text-d);font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.07em;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cpill.on,.cpill:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-g)}
+
+/* ── OBJ GRID ── */
+.ogrid{display:grid;grid-template-columns:repeat(auto-fill,66px);gap:8px;justify-content:center;padding-top:8px;padding-bottom:4px}
+.otile{width:66px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px;border-radius:9px;border:1px solid transparent;background:rgba(255,255,255,.04);transition:all .2s}
+.otile:hover,.otile.sel{border-color:var(--bdr-hi);background:var(--gold-g);transform:scale(1.06)}
+.otile:active{transform:scale(.96)}
+.oico{width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.oico svg{width:44px;height:44px}
+.onam{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.04em;color:var(--text-d);text-align:center;line-height:1.2}
+
+/* ── PLACED ITEMS ── */
+.pi{position:relative;display:inline-flex;align-items:center;justify-content:center;animation:pflt var(--fd,3s) ease-in-out infinite;animation-delay:var(--fdl,0s);cursor:pointer;filter:drop-shadow(0 0 5px rgba(224,184,74,.28))}
+@keyframes pflt{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.pi img{width:46px;height:46px;object-fit:cover;border-radius:50%;border:1.5px solid var(--bdr-hi);box-shadow:0 0 10px var(--gold-d)}
+.pi .rx{display:none;position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;background:rgba(200,50,50,.88);color:white;border:none;cursor:pointer;font-size:10px;align-items:center;justify-content:center;z-index:20;line-height:1}
+.pi:hover .rx{display:flex}
+
+/* candle/incense */
+.cw{display:flex;flex-direction:column;align-items:center}
+.fl{width:10px;height:18px;position:relative;animation:flk .4s ease-in-out infinite alternate}
+.fl::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 90%,#fff 0%,#ffe066 25%,#ff9500 55%,transparent 100%);border-radius:50% 50% 30% 30%;filter:blur(.5px)}
+.fl::after{content:'';position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(ellipse at 50% 80%,rgba(255,175,0,.4) 0%,transparent 70%);animation:flg .9s ease-in-out infinite alternate}
+@keyframes flk{0%{transform:scaleX(.88) rotate(-1.5deg)}100%{transform:scaleX(1.12) rotate(1.5deg)}}
+@keyframes flg{0%{opacity:.5;transform:scale(.85)}100%{opacity:1;transform:scale(1.15)}}
+.incwrap{position:relative;display:flex;flex-direction:column;align-items:center}
+.sm1,.sm2{position:absolute;bottom:100%;width:2px;border-radius:2px;background:linear-gradient(to top,rgba(224,184,74,.45),transparent);transform-origin:bottom}
+.sm1{height:30px;left:calc(50% - 1px);animation:s1 2s ease-in-out infinite}
+.sm2{height:22px;left:calc(50% + 2px);animation:s2 2.4s ease-in-out infinite .5s}
+@keyframes s1{0%,100%{transform:scaleX(1) rotate(3deg);opacity:.5}50%{transform:scaleX(2.5) rotate(-4deg);opacity:.15}}
+@keyframes s2{0%,100%{transform:scaleX(1) rotate(-2deg);opacity:.35}50%{transform:scaleX(2) rotate(5deg);opacity:.1}}
+
+/* ── SOUNDS ── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stile{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:10px;border:1px solid var(--bdr);background:rgba(255,255,255,.04);cursor:pointer;transition:all .2s}
+.stile:hover{border-color:var(--bdr-hi);background:var(--gold-g)}
+.stile.on{border-color:var(--teal);background:rgba(80,200,168,.08)}
+.stile.on .sn{color:var(--teal)}
+.si{font-size:1.4rem}.sn{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.08em;color:var(--text-d)}
+
+/* ── SETTINGS ── */
+.sgrp{margin-bottom:14px}
+.slbl{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.12em;color:var(--text-d);text-transform:uppercase;margin-bottom:8px;display:block}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sk{font-size:.95rem;color:var(--text);font-weight:500}
+.sv{font-family:'Cinzel',serif;font-size:.76rem;color:var(--gold);cursor:pointer;transition:opacity .2s}
+.sv:hover{opacity:.7}
+.bgrd{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.btile{aspect-ratio:1;border-radius:7px;cursor:pointer;border:2px solid transparent;overflow:hidden;transition:all .2s;position:relative}
+.btile.on{border-color:var(--gold)}.btile:hover{border-color:var(--bdr-hi)}
+.btile canvas{width:100%;height:100%;display:block}
+.bname{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.75);text-align:center;font-family:'Cinzel',serif;font-size:.42rem;letter-spacing:.04em;padding:3px;color:var(--text-d)}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dbox{background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:8px;padding:9px}
+.dblbl{font-family:'Cinzel',serif;font-size:.76rem;color:var(--gold);margin-bottom:6px;font-weight:600}
+.dbox input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--bdr);color:var(--text);font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:500;padding:3px 0;outline:none;margin-bottom:3px}
+.dbox input::placeholder{color:var(--text-d)}
+
+/* upload */
+.updrop{border:1.5px dashed var(--bdr);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all .3s;margin-bottom:10px}
+.updrop:hover{border-color:var(--bdr-hi);background:var(--gold-g)}
+.upico{font-size:1.8rem;margin-bottom:5px}.uptxt{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.1em;color:var(--text-d)}.upsub{font-size:.62rem;color:var(--text-d);margin-top:3px;opacity:.6}
+#fi{display:none}
+.zpkr{display:flex;gap:5px;margin-top:9px;flex-wrap:wrap}
+.zpill{flex:1;min-width:38px;padding:6px;border-radius:7px;border:1px solid var(--bdr);background:rgba(255,255,255,.04);color:var(--text-d);font-family:'Cinzel',serif;font-size:.66rem;letter-spacing:.07em;cursor:pointer;transition:all .2s;text-align:center}
+.zpill.on{border-color:var(--purple);color:var(--purple);background:rgba(160,96,224,.1)}
+
+/* modal */
+.mbg{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.82);backdrop-filter:blur(8px);align-items:center;justify-content:center}
+.mbg.open{display:flex}
+.mbox{background:rgba(16,11,4,.97);border:1px solid var(--bdr-hi);border-radius:14px;padding:24px;max-width:320px;width:92%;box-shadow:0 0 60px rgba(224,184,74,.12)}
+.mtitle{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:14px;letter-spacing:.1em}
+.minput{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--bdr);color:var(--text);font-family:'Cormorant Garamond',serif;font-size:1rem;padding:9px 11px;border-radius:8px;outline:none;margin-bottom:13px}
+.minput:focus{border-color:var(--bdr-hi)}
+.mbtns{display:flex;gap:8px}
+.bprim{flex:1;padding:10px;background:rgba(224,184,74,.12);border:1px solid var(--gold);color:var(--gold);font-family:'Cinzel',serif;font-size:.8rem;letter-spacing:.1em;border-radius:8px;cursor:pointer;transition:all .2s}
+.bprim:hover{background:rgba(224,184,74,.24)}
+.bghst{padding:10px 15px;background:transparent;border:1px solid var(--bdr);color:var(--text-d);font-family:'Cinzel',serif;font-size:.8rem;border-radius:8px;cursor:pointer}
+
+/* ── FOCUS / IMMERSIVE MODE ── */
+#focus-overlay{display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;}
+#focus-overlay.on{display:flex;}
+#focus-circle{width:min(90vw,90vh);height:min(90vw,90vh);position:relative;}
+#focus-exit{position:fixed;top:18px;right:18px;background:rgba(200,168,90,.15);border:1px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:13px;padding:8px 18px;border-radius:20px;cursor:pointer;z-index:201;}
+#focus-timer-display{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);font-family:Cinzel,serif;font-size:28px;color:var(--gold);letter-spacing:3px;opacity:.85;}
+
+/* ── RITUAL TIMER ── */
+#timer-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+#timer-row select,#timer-row input{background:rgba(255,255,255,.06);border:1px solid rgba(200,168,90,.3);color:var(--gold);font-family:Cinzel,serif;font-size:12px;padding:4px 8px;border-radius:8px;}
+#timer-status{font-size:12px;color:var(--gold);opacity:.7;min-width:60px;}
+
+/* ── LUNAR CALENDAR ── */
+#lunar-panel{padding:8px 0;}
+.lunar-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(200,168,90,.1);font-size:12px;}
+.lunar-label{color:rgba(200,168,90,.6);}
+.lunar-val{color:var(--gold);}
+
+/* ── PLANETARY HOURS ── */
+#planet-hour{text-align:center;padding:6px 0;}
+.ph-big{font-size:28px;margin-bottom:2px;}
+.ph-sub{font-size:11px;color:rgba(200,168,90,.6);}
+
+/* ── GRIMOIRE ── */
+#grimoire-area{width:100%;box-sizing:border-box;background:rgba(0,0,0,.3);border:1px solid rgba(200,168,90,.2);border-radius:8px;color:var(--fg);font-family:Cormorant Garamond,serif;font-size:14px;padding:10px;resize:none;height:120px;margin-top:6px;}
+#grimoire-area::placeholder{color:rgba(200,168,90,.3);}
+#grimoire-save{margin-top:6px;width:100%;background:rgba(200,168,90,.1);border:1px solid rgba(200,168,90,.3);color:var(--gold);font-family:Cinzel,serif;font-size:12px;padding:7px;border-radius:8px;cursor:pointer;}
+
+/* ── SABBAT PRESETS ── */
+.sabbat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px;}
+.sabbat-btn{background:rgba(200,168,90,.08);border:1px solid rgba(200,168,90,.2);color:var(--gold);font-family:Cinzel,serif;font-size:10px;padding:7px 4px;border-radius:8px;cursor:pointer;text-align:center;}
+.sabbat-btn:active{background:rgba(200,168,90,.2);}
+
+/* ── COLOUR CORRESPONDENCE ── */
+#candle-tip{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(18,12,6,.95);border:1px solid var(--gold);border-radius:12px;padding:8px 16px;font-size:12px;color:var(--gold);font-family:Cormorant Garamond,serif;text-align:center;opacity:0;transition:opacity .4s;pointer-events:none;z-index:150;max-width:260px;}
+#candle-tip.show{opacity:1;}
+
+/* ── TAROT JOURNAL ── */
+.tj-entry{padding:6px 0;border-bottom:1px solid rgba(200,168,90,.1);font-size:12px;}
+.tj-card{color:var(--gold);font-weight:bold;}
+.tj-date{color:rgba(200,168,90,.5);font-size:10px;}
+.tj-note{color:var(--fg);font-size:11px;margin-top:2px;font-style:italic;}
+#tj-clear{font-size:11px;color:rgba(200,168,90,.4);cursor:pointer;padding:4px 0;display:block;text-align:right;}
+</style>
+</head>
+<body>
+<canvas id="bdc"></canvas>
+<div id="sf"></div>
+<div id="ptcl"></div>
+<div id="app">
+  <header>
+    <div>
+      <div class="atitle">✦ POCKET ALTAR ✦</div>
+      <div class="asub" id="aname" onclick="openM('name')">~ The Sacred Space ~</div>
+    </div>
+    <div class="hdr-r">
+      <div id="moon" title="Moon phase — tap for lunar info" onclick="openM('settings');setTimeout(()=>{const lp=document.getElementById('lunar-panel');if(lp)lp.scrollIntoView({behavior:'smooth'});},300)" style="cursor:pointer">🌒</div>
+      <button class="ibtn" title="Toggle zone labels" onclick="togLabels()" id="lbl-icon">𝕃</button>
+      <button class="ibtn" title="Rename altar" onclick="openM('name')">✦</button>
+    </div>
+  </header>
+
+  <div id="aa">
+    <div id="altar">
+      <div class="ring-o"></div><div class="ring-i"></div><div class="cross"></div>
+      <svg id="penta" viewBox="0 0 100 100" fill="none">
+        <polygon points="50,5 61,35 95,35 68,57 79,91 50,70 21,91 32,57 5,35 39,35" stroke="rgba(224,184,74,.9)" stroke-width=".6"/>
+      </svg>
+      <!-- Cardinal zones -->
+      <div class="dz dz-N" id="dz-N" data-dir="N" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'N')" onclick="dzc('N')">
+        <div class="dl" id="dl-N">N</div><div class="dn" id="dn-N">North</div><div class="de" id="de-N">Earth</div><div class="zo" id="zo-N"></div>
+      </div>
+      <div class="dz dz-E" id="dz-E" data-dir="E" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'E')" onclick="dzc('E')">
+        <div class="dl" id="dl-E">E</div><div class="dn" id="dn-E">East</div><div class="de" id="de-E">Air</div><div class="zo" id="zo-E"></div>
+      </div>
+      <div class="dz dz-S" id="dz-S" data-dir="S" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'S')" onclick="dzc('S')">
+        <div class="dl" id="dl-S">S</div><div class="dn" id="dn-S">South</div><div class="de" id="de-S">Fire</div><div class="zo" id="zo-S"></div>
+      </div>
+      <div class="dz dz-W" id="dz-W" data-dir="W" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'W')" onclick="dzc('W')">
+        <div class="dl" id="dl-W">W</div><div class="dn" id="dn-W">West</div><div class="de" id="de-W">Water</div><div class="zo" id="zo-W"></div>
+      </div>
+      <!-- Inter-cardinal -->
+      <div class="iqz iqz-NE" id="iq-NE" data-dir="NE" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'NE')" onclick="dzc('NE')"><div class="iql">NE</div><div class="iqo" id="zo-NE"></div></div>
+      <div class="iqz iqz-SE" id="iq-SE" data-dir="SE" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'SE')" onclick="dzc('SE')"><div class="iql">SE</div><div class="iqo" id="zo-SE"></div></div>
+      <div class="iqz iqz-SW" id="iq-SW" data-dir="SW" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'SW')" onclick="dzc('SW')"><div class="iql">SW</div><div class="iqo" id="zo-SW"></div></div>
+      <div class="iqz iqz-NW" id="iq-NW" data-dir="NW" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'NW')" onclick="dzc('NW')"><div class="iql">NW</div><div class="iqo" id="zo-NW"></div></div>
+      <!-- Centre -->
+      <div id="cz" ondragover="dzo(event)" ondragleave="dzl(event)" ondrop="dzd(event,'C')" onclick="dzc('C')">
+        <div id="czo"></div><div class="chint" id="chint">✦ Centre ✦</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="iw"><input id="ii" type="text" placeholder="Set your intention…" maxlength="130" oninput="saveInt()" autocomplete="off" spellcheck="false"></div>
+
+  <div id="tb">
+    <div class="ttabs">
+      <button class="tbtn on" onclick="swTab('objects',this)">Objects</button>
+      <button class="tbtn" onclick="swTab('upload',this)">Upload</button>
+      <button class="tbtn" onclick="swTab('sounds',this)">Sounds</button>
+      <button class="tbtn" onclick="swTab('settings',this)">Settings</button>
+    </div>
+    <div class="tpanel on" id="tp-objects">
+      <div class="panel-scroll">
+        <div class="cats" id="cats"></div>
+        <div class="ogrid" id="ogrid"></div>
+      </div>
+    </div>
+    <div class="tpanel" id="tp-upload">
+      <div class="panel-scroll">
+        <div class="updrop" onclick="document.getElementById('fi').click()">
+          <div class="upico">📜</div><div class="uptxt">Upload Sigil · Photo · Image</div><div class="upsub">PNG · JPG · SVG · GIF · WEBP</div>
+        </div>
+        <input type="file" id="fi" accept="image/*" onchange="handleUp(event)">
+        <div style="font-family:'Cinzel',serif;font-size:.7rem;color:var(--text-d);letter-spacing:.1em;margin-bottom:6px">PLACE IN ZONE:</div>
+        <div class="zpkr" id="zpkr">
+          <div class="zpill on" onclick="pickZ('N',this)">N</div>
+          <div class="zpill" onclick="pickZ('NE',this)">NE</div>
+          <div class="zpill" onclick="pickZ('E',this)">E</div>
+          <div class="zpill" onclick="pickZ('SE',this)">SE</div>
+          <div class="zpill" onclick="pickZ('S',this)">S</div>
+          <div class="zpill" onclick="pickZ('SW',this)">SW</div>
+          <div class="zpill" onclick="pickZ('W',this)">W</div>
+          <div class="zpill" onclick="pickZ('NW',this)">NW</div>
+          <div class="zpill" onclick="pickZ('C',this)">Centre</div>
+        </div>
+      </div>
+    </div>
+    <div class="tpanel" id="tp-sounds">
+      <div class="panel-scroll"><div class="sgrid" id="sgrid"></div></div>
+    </div>
+    <div class="tpanel" id="tp-settings">
+      <div class="panel-scroll">
+        <div class="sgrp">
+          <span class="slbl">Backdrop</span>
+          <div class="bgrd" id="bgrd"></div>
+          <div style="margin-top:8px">
+            <div class="updrop" onclick="document.getElementById('bfi').click()" style="padding:10px">
+              <div style="font-family:'Cinzel',serif;font-size:.68rem;color:var(--text-d);letter-spacing:.1em">+ Upload Custom Backdrop</div>
+            </div>
+            <input type="file" id="bfi" accept="image/*" style="display:none" onchange="uploadBd(event)">
+          </div>
+        </div>
+        <div class="sgrp">
+          <div class="srow"><span class="sk">Stars</span><span class="sv" id="star-tog" onclick="togStars()">Off</span></div>
+          <div class="srow"><span class="sk">Labels</span><span class="sv" id="lbl-tog" onclick="togLabels()">Visible</span></div>
+          <div class="srow"><span class="sk">Pentagram</span><span class="sv" id="penta-tog" onclick="togPenta()">Off</span></div>
+          <div class="srow"><span class="sk">Ritual Mode</span><span class="sv" id="rit-tog" onclick="togRitual()">Off</span></div>
+          <div class="srow"><span class="sk">Clear Altar</span><span class="sv" style="color:var(--red)" onclick="clearAltar()">Clear All</span></div>
+        </div>
+        <div class="sgrp">
+          <span class="slbl">⏱ Ritual Timer</span>
+          <div id="timer-row">
+            <select id="timer-sel" onchange="setTimer()">
+              <option value="0">Off</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="20">20 min</option>
+              <option value="30">30 min</option>
+              <option value="45">45 min</option>
+              <option value="60">1 hour</option>
+            </select>
+            <span id="timer-status">--:--</span>
+          </div>
+        </div>
+        <div class="sgrp">
+          <span class="slbl">🌙 Moon &amp; Timing</span>
+          <div id="lunar-panel"></div>
+          <div id="planet-hour"></div>
+        </div>
+        <div class="sgrp">
+          <span class="slbl">🔮 Sabbat Presets</span>
+          <div class="sabbat-grid">
+            <button class="sabbat-btn" onclick="loadSabbat('samhain')">🎃 Samhain</button>
+            <button class="sabbat-btn" onclick="loadSabbat('yule')">❄️ Yule</button>
+            <button class="sabbat-btn" onclick="loadSabbat('imbolc')">🕯️ Imbolc</button>
+            <button class="sabbat-btn" onclick="loadSabbat('ostara')">🌸 Ostara</button>
+            <button class="sabbat-btn" onclick="loadSabbat('beltane')">🔥 Beltane</button>
+            <button class="sabbat-btn" onclick="loadSabbat('litha')">☀️ Litha</button>
+            <button class="sabbat-btn" onclick="loadSabbat('lughnasadh')">🌾 Lughnasadh</button>
+            <button class="sabbat-btn" onclick="loadSabbat('mabon')">🍂 Mabon</button>
+          </div>
+        </div>
+        <div class="sgrp">
+          <span class="slbl">📝 Notes</span>
+          <textarea id="grimoire-area" placeholder="Your ritual notes will appear here after each working…" oninput="saveGrimoire()"></textarea>
+        </div>
+        <div class="sgrp">
+          <span class="slbl">Directions &amp; Elements</span>
+          <div class="dgrid" id="dgrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="focus-overlay">
+  <button id="focus-exit" onclick="togRitual()">✦ Exit Sacred Space</button>
+  <div id="focus-circle"></div>
+  <div id="focus-timer-display" style="display:none"></div>
+</div>
+
+<div class="mbg" id="m-zone-pick">
+  <div class="mbox">
+    <div class="mtitle" id="zp-title">Place where?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0;">
+      <button class="sabbat-btn" onclick="zpPlace('NW')">↖ NW</button>
+      <button class="sabbat-btn" onclick="zpPlace('N')">↑ N</button>
+      <button class="sabbat-btn" onclick="zpPlace('NE')">↗ NE</button>
+      <button class="sabbat-btn" onclick="zpPlace('W')">← W</button>
+      <button class="sabbat-btn" style="background:rgba(200,168,90,.2)" onclick="zpPlace('C')">✦ C</button>
+      <button class="sabbat-btn" onclick="zpPlace('E')">→ E</button>
+      <button class="sabbat-btn" onclick="zpPlace('SW')">↙ SW</button>
+      <button class="sabbat-btn" onclick="zpPlace('S')">↓ S</button>
+      <button class="sabbat-btn" onclick="zpPlace('SE')">↘ SE</button>
+    </div>
+    <div class="mbtns"><button class="bghst" onclick="closeM('zone-pick')">Cancel</button></div>
+  </div>
+</div>
+<div class="mbg" id="m-name">
+  <div class="mbox">
+    <div class="mtitle">Name Your Altar</div>
+    <input class="minput" id="ni" placeholder="The Sacred Space…" maxlength="50">
+    <div class="mbtns"><button class="bghst" onclick="closeM('name')">Cancel</button><button class="bprim" onclick="saveN()">Consecrate</button></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  SVG CONSTRUCTION HELPERS
+// ════════════════════════════════════════════
+const SV=(c,v='0 0 44 44')=>`<svg viewBox="${v}" xmlns="http://www.w3.org/2000/svg">${c}</svg>`;
+const CANDLE=c=>`__C__${c}`;
+const INC='__I__';
+
+// ─────────────────────────────────────────────────────────────
+//  ACCURATE PAGAN SYMBOLS — drawn from reference images
+// ─────────────────────────────────────────────────────────────
+
+// TRIQUETRA — three interlocked teardrop/leaf shapes forming a continuous knot.
+// Each lobe is a pointed oval; the three lobes rotate 120° apart and overlap
+// at the centre, weaving over/under. Drawn as three arcs of overlapping circles.
+function chaosStar(){
+  let s='';
+  for(let i=0;i<8;i++){
+    const a=i*Math.PI/4;
+    const x2=(22+18*Math.cos(a)).toFixed(2),y2=(22+18*Math.sin(a)).toFixed(2);
+    const b1=a+2.88,b2=a-2.88,hl=5;
+    s+=`<line x1="22" y1="22" x2="${x2}" y2="${y2}" stroke="#b050f0" stroke-width="1.7"/>`;
+    s+=`<line x1="${x2}" y1="${y2}" x2="${(+x2+hl*Math.cos(b1)).toFixed(2)}" y2="${(+y2+hl*Math.sin(b1)).toFixed(2)}" stroke="#b050f0" stroke-width="1.5"/>`;
+    s+=`<line x1="${x2}" y1="${y2}" x2="${(+x2+hl*Math.cos(b2)).toFixed(2)}" y2="${(+y2+hl*Math.sin(b2)).toFixed(2)}" stroke="#b050f0" stroke-width="1.5"/>`;
+  }
+  return SV(s+`<circle cx="22" cy="22" r="3" fill="none" stroke="#b050f0" stroke-width="1.3"/>`);
+}
+
+function yinyang(){
+  return SV(`<circle cx="22" cy="22" r="18" fill="#1a1a1a" stroke="#666" stroke-width=".8"/><path d="M22 4 A9 9 0 0 1 22 22 A9 9 0 0 0 22 40 A18 18 0 0 0 22 4 Z" fill="white"/><circle cx="22" cy="13" r="4.5" fill="white"/><circle cx="22" cy="31" r="4.5" fill="#1a1a1a"/><circle cx="22" cy="13" r="1.8" fill="#1a1a1a"/><circle cx="22" cy="31" r="1.8" fill="white"/><circle cx="22" cy="22" r="18" fill="none" stroke="#666" stroke-width=".8"/>`);
+}
+
+function celticKnot(){
+  // Same triquetra construction, encircled
+  const cx=22,cy=22,R=11,c3=R/Math.sqrt(3);
+  const centres=[0,1,2].map(i=>{const a=-Math.PI/2+i*2*Math.PI/3;return[cx+c3*Math.cos(a),cy+c3*Math.sin(a)];});
+  function ix(c1,c2){const dx=c2[0]-c1[0],dy=c2[1]-c1[1],d=Math.sqrt(dx*dx+dy*dy),a=d/2,h=Math.sqrt(Math.max(0,R*R-a*a)),mx=(c1[0]+c2[0])/2,my=(c1[1]+c2[1])/2;return[[mx+h*dy/d,my-h*dx/d],[mx-h*dy/d,my+h*dx/d]];}
+  const dst=(p,c)=>(p[0]-c[0])**2+(p[1]-c[1])**2;
+  let d='';
+  for(let i=0;i<3;i++){
+    const ci=centres[i],cn=centres[(i+1)%3],cp=centres[(i+2)%3];
+    const Pn=ix(ci,cn),Pp=ix(ci,cp);
+    const pn=dst(Pn[0],cp)>dst(Pn[1],cp)?Pn[0]:Pn[1];
+    const pp=dst(Pp[0],cn)>dst(Pp[1],cn)?Pp[0]:Pp[1];
+    const cross=(pn[0]-ci[0])*(pp[1]-ci[1])-(pn[1]-ci[1])*(pp[0]-ci[0]);
+    d+=(i===0?`M ${pn[0].toFixed(2)} ${pn[1].toFixed(2)} `:'')+`A ${R} ${R} 0 0 ${cross>0?1:0} ${pp[0].toFixed(2)} ${pp[1].toFixed(2)} `;
+  }
+  d+='Z';
+  return SV(`<circle cx="22" cy="22" r="20" fill="none" stroke="#c8a85a" stroke-width="1.5"/><path d="${d}" fill="none" stroke="#c8a85a" stroke-width="2.2" stroke-linecap="round"/>`);
+}
+
+
+
+// ── Crystal ──
+function cry(c1,c2,c3){
+  const id='g'+c1.replace(/[^0-9a-f]/gi,'x');
+  return SV(`<defs>
+    <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${c1}" stop-opacity=".95"/>
+      <stop offset="50%" stop-color="${c2}" stop-opacity=".75"/>
+      <stop offset="100%" stop-color="${c3}" stop-opacity=".55"/>
+    </linearGradient>
+    <linearGradient id="${id}h" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="white" stop-opacity=".35"/>
+      <stop offset="40%" stop-color="white" stop-opacity=".0"/>
+    </linearGradient>
+  </defs>
+  <polygon points="22,4 34,14 34,30 22,40 10,30 10,14" fill="url(#${id})" stroke="${c1}" stroke-width="1"/>
+  <polygon points="22,4 30,12 22,20 14,12" fill="url(#${id}h)" opacity=".6"/>
+  <polygon points="22,4 25,10 22,8 19,10" fill="white" opacity=".55"/>
+  <line x1="22" y1="4" x2="22" y2="40" stroke="white" stroke-width=".5" opacity=".18"/>
+  <line x1="10" y1="14" x2="34" y2="14" stroke="white" stroke-width=".4" opacity=".15"/>
+  <line x1="10" y1="30" x2="34" y2="30" stroke="${c3}" stroke-width=".4" opacity=".3"/>`);
+}
+
+// Element triangles
+const E={
+  fire: SV(`<polygon points="22,4 40,38 4,38" fill="rgba(220,80,40,.18)" stroke="#e05030" stroke-width="2.2"/>`),
+  water:SV(`<polygon points="22,40 4,6 40,6" fill="rgba(60,120,200,.18)" stroke="#4080cc" stroke-width="2.2"/>`),
+  air:  SV(`<polygon points="22,4 40,38 4,38" fill="rgba(160,200,240,.12)" stroke="#b0c8e8" stroke-width="2.2"/><line x1="10" y1="28" x2="34" y2="28" stroke="#b0c8e8" stroke-width="2.2"/>`),
+  earth:SV(`<polygon points="22,40 4,6 40,6" fill="rgba(80,130,50,.18)" stroke="#6a9040" stroke-width="2.2"/><line x1="10" y1="22" x2="34" y2="22" stroke="#6a9040" stroke-width="2.2"/>`),
+  spirit:SV(`<circle cx="22" cy="22" r="17" fill="none" stroke="#e0b84a" stroke-width="1.5"/><circle cx="22" cy="22" r="2.5" fill="#e0b84a"/><line x1="22" y1="5" x2="22" y2="39" stroke="#e0b84a" stroke-width="1"/><line x1="5" y1="22" x2="39" y2="22" stroke="#e0b84a" stroke-width="1"/>`)
+};
+
+// ════════════════════════════════════════════
+//  REALISTIC ITEMS — gradients, highlights, depth
+// ════════════════════════════════════════════
+
+// Chalice — polished silver goblet with reflection
+const chalice=SV(`<defs>
+  <linearGradient id="chg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#606070"/><stop offset="30%" stop-color="#c0c0d0"/>
+    <stop offset="50%" stop-color="#e8e8f0"/><stop offset="70%" stop-color="#c0c0d0"/>
+    <stop offset="100%" stop-color="#505060"/>
+  </linearGradient>
+  <linearGradient id="wg" x1="0%" y1="100%" x2="0%" y2="0%">
+    <stop offset="0%" stop-color="#2060a0" stop-opacity=".8"/><stop offset="100%" stop-color="#80c0e8" stop-opacity=".4"/>
+  </linearGradient>
+</defs>
+<path d="M15 6 Q11 18 11 26 Q11 35 22 35 Q33 35 33 26 Q33 18 29 6Z" fill="url(#chg)" stroke="#909098" stroke-width=".8"/>
+<ellipse cx="22" cy="22" rx="9" ry="3" fill="url(#wg)" opacity=".7"/>
+<path d="M16 7 Q18 5 20 6" stroke="white" stroke-width=".9" opacity=".5" fill="none"/>
+<line x1="22" y1="35" x2="22" y2="40" stroke="url(#chg)" stroke-width="2.5"/>
+<ellipse cx="22" cy="40" rx="7" ry="1.5" fill="url(#chg)" stroke="#707080" stroke-width=".8"/>
+<line x1="15" y1="6" x2="29" y2="6" stroke="#b0b0c0" stroke-width="1.2"/>`);
+
+// Cauldron — cast iron, deep black with green brew
+const cauldron=SV(`<defs>
+  <radialGradient id="cag" cx="35%" cy="30%">
+    <stop offset="0%" stop-color="#555"/><stop offset="100%" stop-color="#1a1a1a"/>
+  </radialGradient>
+  <radialGradient id="brw" cx="50%" cy="50%">
+    <stop offset="0%" stop-color="#50c040" stop-opacity=".8"/><stop offset="60%" stop-color="#208030" stop-opacity=".5"/><stop offset="100%" stop-color="#104020" stop-opacity=".2"/>
+  </radialGradient>
+</defs>
+<path d="M10 22 Q8 36 22 38 Q36 36 34 22Z" fill="url(#cag)" stroke="#333" stroke-width=".8"/>
+<ellipse cx="22" cy="22" rx="12" ry="4.5" fill="url(#brw)"/>
+<ellipse cx="22" cy="22" rx="12" ry="4.5" fill="none" stroke="#2a2a2a" stroke-width="1.5"/>
+<path d="M10.5 21 Q11 16 22 15 Q33 16 33.5 21" stroke="#444" stroke-width=".7" fill="none"/>
+<line x1="10" y1="20" x2="6" y2="13" stroke="#333" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="34" y1="20" x2="38" y2="13" stroke="#333" stroke-width="2.2" stroke-linecap="round"/>
+<line x1="6" y1="13" x2="38" y2="13" stroke="#333" stroke-width="1.8"/>
+<path d="M10.5 24 Q22 28 33.5 24" stroke="#444" stroke-width=".6" fill="none"/>`);
+
+// Athame — black handle, steel blade
+const athame=SV(`<defs>
+  <linearGradient id="atg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#505058"/><stop offset="35%" stop-color="#c8c8d8"/>
+    <stop offset="55%" stop-color="#e8e8f0"/><stop offset="100%" stop-color="#404048"/>
+  </linearGradient>
+  <linearGradient id="ahg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#1a1a20"/><stop offset="40%" stop-color="#383848"/><stop offset="100%" stop-color="#1a1a20"/>
+  </linearGradient>
+</defs>
+<path d="M22 4 L24.5 28 L22 30 L19.5 28Z" fill="url(#atg)" stroke="#808090" stroke-width=".6"/>
+<line x1="22" y1="4" x2="22" y2="27" stroke="white" stroke-width=".5" opacity=".3"/>
+<rect x="17.5" y="27" width="9" height="10" rx="1.5" fill="url(#ahg)" stroke="#555" stroke-width=".8"/>
+<line x1="18" y1="30" x2="26" y2="30" stroke="#555" stroke-width=".6"/>
+<line x1="18" y1="33" x2="26" y2="33" stroke="#555" stroke-width=".6"/>`);
+
+// Sword — long blade, ornate crossguard
+const sword=SV(`<defs>
+  <linearGradient id="swg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#606068"/><stop offset="30%" stop-color="#d8d8e8"/>
+    <stop offset="52%" stop-color="#f0f0f8"/><stop offset="100%" stop-color="#505058"/>
+  </linearGradient>
+  <linearGradient id="hilt" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#805010"/><stop offset="50%" stop-color="#c8901a"/><stop offset="100%" stop-color="#805010"/>
+  </linearGradient>
+</defs>
+<path d="M22 2 L23.2 32 L22 36 L20.8 32Z" fill="url(#swg)" stroke="#808090" stroke-width=".6"/>
+<line x1="22" y1="2" x2="22" y2="31" stroke="white" stroke-width=".5" opacity=".25"/>
+<rect x="13" y="29" width="18" height="3" rx="1.5" fill="url(#hilt)" stroke="#604010" stroke-width=".7"/>
+<circle cx="13" cy="30.5" r="2" fill="url(#hilt)" stroke="#604010" stroke-width=".6"/>
+<circle cx="31" cy="30.5" r="2" fill="url(#hilt)" stroke="#604010" stroke-width=".6"/>
+<rect x="20" y="32" width="4" height="10" rx="1" fill="url(#hilt)" stroke="#604010" stroke-width=".7"/>
+<path d="M21 35 L23 35 M21 38 L23 38" stroke="#604010" stroke-width=".6"/>`);
+
+// Wand — polished wood, crystal tip
+const wand=SV(`<defs>
+  <linearGradient id="wdg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#4a2808"/><stop offset="25%" stop-color="#8a5018"/>
+    <stop offset="50%" stop-color="#c07828"/><stop offset="75%" stop-color="#8a5018"/>
+    <stop offset="100%" stop-color="#4a2808"/>
+  </linearGradient>
+  <radialGradient id="cryg" cx="35%" cy="30%">
+    <stop offset="0%" stop-color="#d0f0ff"/><stop offset="60%" stop-color="#80c0e8" stop-opacity=".7"/>
+    <stop offset="100%" stop-color="#4080b0" stop-opacity=".4"/>
+  </radialGradient>
+</defs>
+<line x1="10" y1="38" x2="33" y2="9" stroke="url(#wdg)" stroke-width="3.5" stroke-linecap="round"/>
+<line x1="10.5" y1="37" x2="33.5" y2="8" stroke="white" stroke-width=".7" opacity=".2"/>
+<circle cx="34" cy="8" r="5" fill="url(#cryg)" stroke="#a0c8e8" stroke-width="1"/>
+<circle cx="32.5" cy="6.5" r="1.5" fill="white" opacity=".6"/>
+<path d="M11 36 Q12 34 13.5 35" stroke="rgba(80,40,10,.4)" stroke-width=".8" fill="none"/>`);
+
+// Staff — dark polished wood
+const staff=SV(`<defs>
+  <linearGradient id="stg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#2a1208"/><stop offset="30%" stop-color="#7a4018"/>
+    <stop offset="60%" stop-color="#9a5820"/><stop offset="100%" stop-color="#2a1208"/>
+  </linearGradient>
+</defs>
+<line x1="22" y1="2" x2="22" y2="42" stroke="url(#stg)" stroke-width="3.5" stroke-linecap="round"/>
+<line x1="22" y1="2" x2="22" y2="42" stroke="white" stroke-width=".6" opacity=".12"/>
+<circle cx="22" cy="5" r="4.5" fill="none" stroke="#c8a85a" stroke-width="1.5"/>
+<circle cx="22" cy="5" r="2.5" fill="#c8a85a" opacity=".5"/>
+<line x1="17" y1="9" x2="27" y2="9" stroke="#c8a85a" stroke-width="1.3"/>`);
+
+// Broom — realistic besom
+const broom=SV(`<defs>
+  <linearGradient id="bmg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#3a1a08"/><stop offset="40%" stop-color="#8a5020"/>
+    <stop offset="100%" stop-color="#3a1a08"/>
+  </linearGradient>
+</defs>
+<line x1="30" y1="4" x2="17" y2="39" stroke="url(#bmg)" stroke-width="3" stroke-linecap="round"/>
+<path d="M8 37 Q12 29 17 34 Q22 40 28 34 Q32 29 36 33 L34 37 Q30 41 25 39 Q20 43 16 39 Q11 42 8 37Z" fill="#a07838" opacity=".7" stroke="#7a5818" stroke-width=".8"/>
+<path d="M10 35 Q14 32 17 34 M18 37 Q22 33 25 36 M27 35 Q31 31 34 34" stroke="#5a3808" stroke-width=".7" fill="none" opacity=".6"/>
+<line x1="12" y1="33" x2="15" y2="28" stroke="#7a5018" stroke-width=".8" opacity=".5"/>
+<line x1="19" y1="32" x2="21" y2="27" stroke="#7a5018" stroke-width=".8" opacity=".5"/>
+<line x1="26" y1="32" x2="27" y2="27" stroke="#7a5018" stroke-width=".8" opacity=".5"/>`);
+
+// Pentacle — engraved disc
+const pentacle=SV(`<defs>
+  <radialGradient id="pdg" cx="40%" cy="35%">
+    <stop offset="0%" stop-color="#e0d090"/><stop offset="50%" stop-color="#c0a840"/>
+    <stop offset="100%" stop-color="#806820"/>
+  </radialGradient>
+</defs>
+<circle cx="22" cy="22" r="18" fill="url(#pdg)" stroke="#a08030" stroke-width="1"/>
+<circle cx="22" cy="22" r="18" fill="none" stroke="#806020" stroke-width="2"/>
+<polygon points="22,6 26.1,17.8 38.8,17.8 28.9,25.2 32.4,37 22,30 11.6,37 15.1,25.2 5.2,17.8 17.9,17.8" fill="none" stroke="#4a3010" stroke-width="1.5"/>
+<circle cx="22" cy="5" r="1.2" fill="#604010" opacity=".4"/>
+<path d="M17 8 Q19 6 21 7" stroke="rgba(255,255,200,.4)" stroke-width=".8" fill="none"/>`);
+
+// Offering bowl — dark ceramic
+const bowl=c=>SV(`<defs>
+  <linearGradient id="blg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#2a2020"/><stop offset="30%" stop-color="${c}" stop-opacity=".9"/>
+    <stop offset="60%" stop-color="${c}"/><stop offset="100%" stop-color="#2a2020"/>
+  </linearGradient>
+</defs>
+<path d="M7 26 Q7 38 22 38 Q37 38 37 26 L37 24 Q37 22 22 22 Q7 22 7 24Z" fill="url(#blg)" stroke="#3a2818" stroke-width=".8"/>
+<ellipse cx="22" cy="22" rx="15" ry="5" fill="none" stroke="${c}" stroke-width="1.5"/>
+<ellipse cx="22" cy="22" rx="12" ry="3.5" fill="${c}" opacity=".2"/>
+<path d="M9 22 Q10 19 22 18 Q34 19 35 22" stroke="rgba(255,255,255,.15)" stroke-width=".8" fill="none"/>
+<line x1="9" y1="38" x2="35" y2="38" stroke="#4a3020" stroke-width="1.5"/>`);
+
+// Mortar & Pestle
+const mortar=SV(`<defs>
+  <linearGradient id="mtg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#383838"/><stop offset="35%" stop-color="#787878"/>
+    <stop offset="65%" stop-color="#909090"/><stop offset="100%" stop-color="#383838"/>
+  </linearGradient>
+</defs>
+<path d="M11 28 Q11 38 22 38 Q33 38 33 28 L33 22 L11 22Z" fill="url(#mtg)" stroke="#282828" stroke-width=".8"/>
+<ellipse cx="22" cy="22" rx="11" ry="4.5" fill="#555" stroke="#282828" stroke-width="1.2"/>
+<path d="M11.5 23 Q22 26 32.5 23" stroke="#4a4a4a" stroke-width=".6" fill="none"/>
+<line x1="30" y1="13" x2="36" y2="28" stroke="url(#mtg)" stroke-width="2.8" stroke-linecap="round"/>
+<line x1="30.5" y1="13" x2="36.5" y2="28" stroke="white" stroke-width=".5" opacity=".2"/>`);
+
+// Eye of Providence
+const eyeSvg=SV(`<defs>
+  <radialGradient id="eyeg" cx="50%" cy="50%">
+    <stop offset="0%" stop-color="#4040c0"/><stop offset="40%" stop-color="#c8a010"/>
+    <stop offset="100%" stop-color="#806010"/>
+  </radialGradient>
+</defs>
+<path d="M4 22 Q22 6 40 22 Q22 38 4 22Z" fill="rgba(220,200,100,.12)" stroke="#c8a820" stroke-width="1.6"/>
+<circle cx="22" cy="22" r="6.5" fill="white" stroke="#c8a820" stroke-width="1"/>
+<circle cx="22" cy="22" r="4.5" fill="url(#eyeg)"/>
+<circle cx="22" cy="22" r="2.5" fill="#101010"/>
+<circle cx="23.5" cy="20.5" r="1.2" fill="white" opacity=".6"/>
+<circle cx="21" cy="23" r=".7" fill="white" opacity=".3"/>`);
+
+// Moon — glowing crescent
+const moonSvg=SV(`<defs>
+  <radialGradient id="mng" cx="45%" cy="40%">
+    <stop offset="0%" stop-color="#fffce0"/>
+    <stop offset="50%" stop-color="#f0e080"/>
+    <stop offset="100%" stop-color="#b09830"/>
+  </radialGradient>
+</defs>
+<circle cx="22" cy="22" r="17" fill="url(#mng)" stroke="#c0a830" stroke-width=".8"/>
+<circle cx="16" cy="16" r="4" fill="rgba(255,255,220,.2)"/>
+<circle cx="14" cy="14" r="2" fill="rgba(255,255,220,.3)"/>
+<circle cx="28" cy="28" r="3" fill="rgba(160,140,40,.2)"/>
+`);
+
+const sunSvg=()=>{
+  let r='';
+  for(let a=0;a<360;a+=30){
+    const rd=a*Math.PI/180;
+    r+=`<line x1="${(22+10*Math.cos(rd)).toFixed(1)}" y1="${(22+10*Math.sin(rd)).toFixed(1)}" x2="${(22+16*Math.cos(rd)).toFixed(1)}" y2="${(22+16*Math.sin(rd)).toFixed(1)}" stroke="#f0c020" stroke-width="1.8"/>`;
+  }
+  return SV(`<defs><radialGradient id="sug" cx="45%" cy="40%"><stop offset="0%" stop-color="#fff8a0"/><stop offset="50%" stop-color="#f0c020"/><stop offset="100%" stop-color="#c08010"/></radialGradient></defs><circle cx="22" cy="22" r="9" fill="url(#sug)" stroke="#c09010" stroke-width=".8"/>${r}<circle cx="19.5" cy="19.5" r="2.5" fill="rgba(255,255,220,.3)"/>`);
+};
+
+// Mirror — silver hand mirror
+const mirrorSvg=SV(`<defs>
+  <radialGradient id="mrg" cx="35%" cy="30%">
+    <stop offset="0%" stop-color="#e0e8f8"/><stop offset="50%" stop-color="#a0b0d0" stop-opacity=".6"/>
+    <stop offset="100%" stop-color="#4060a0" stop-opacity=".3"/>
+  </radialGradient>
+  <linearGradient id="frg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#606070"/><stop offset="40%" stop-color="#c8c8d8"/>
+    <stop offset="100%" stop-color="#606070"/>
+  </linearGradient>
+</defs>
+<ellipse cx="22" cy="17" rx="13" ry="14" fill="url(#frg)" stroke="#808090" stroke-width=".8"/>
+<ellipse cx="22" cy="17" rx="11" ry="12" fill="url(#mrg)"/>
+<path d="M13 10 Q16 7 20 9" stroke="white" stroke-width=".9" opacity=".5" fill="none"/>
+<line x1="22" y1="31" x2="22" y2="40" stroke="url(#frg)" stroke-width="2.5"/>
+<ellipse cx="22" cy="40" rx="6" ry="1.5" fill="url(#frg)" stroke="#707080" stroke-width=".7"/>`);
+
+// Shell — iridescent
+const shellSvg=SV(`<text x="22" y="32" font-size="28" text-anchor="middle">🐚</text>`);
+
+
+
+// Water drop
+const waterDrop=SV(`<defs>
+  <linearGradient id="wdrop" x1="30%" y1="0%" x2="70%" y2="100%">
+    <stop offset="0%" stop-color="#a0d0f0"/><stop offset="40%" stop-color="#4090d0"/>
+    <stop offset="100%" stop-color="#1050a0"/>
+  </linearGradient>
+</defs>
+<path d="M22 5 Q33 18 33 26 A11 11 0 0 1 11 26 Q11 18 22 5Z" fill="url(#wdrop)" stroke="#3070b0" stroke-width=".8"/>
+<path d="M16 20 Q17 16 20 14" stroke="rgba(255,255,255,.55)" stroke-width="1.1" fill="none"/>
+<circle cx="26" cy="24" r="2.5" fill="rgba(255,255,255,.15)"/>`);
+
+// Feather — realistic quill with barbs
+// Feather
+const feather=SV(`<text x="22" y="32" font-size="28" text-anchor="middle">🪶</text>`);
+
+
+
+// Crystal ball — glass sphere
+const crystalBall=SV(`<defs>
+  <radialGradient id="cbg" cx="35%" cy="30%">
+    <stop offset="0%" stop-color="rgba(255,255,255,.8)"/><stop offset="20%" stop-color="rgba(200,230,255,.6)"/>
+    <stop offset="60%" stop-color="rgba(100,160,220,.3)"/><stop offset="100%" stop-color="rgba(40,80,160,.2)"/>
+  </radialGradient>
+</defs>
+<circle cx="22" cy="20" r="15" fill="url(#cbg)" stroke="#a0c0e0" stroke-width="1.2"/>
+<circle cx="16" cy="14" r="5" fill="rgba(255,255,255,.25)" stroke="none"/>
+<circle cx="14" cy="12" r="2.5" fill="rgba(255,255,255,.4)" stroke="none"/>
+<ellipse cx="22" cy="35" rx="10" ry="2.5" fill="rgba(0,0,0,.4)"/>
+<path d="M10" y1="35" x2="34" y2="35" stroke="#607090" stroke-width="1.5"/>
+<path d="M13 18 Q14 12 19 11" stroke="rgba(255,255,255,.4)" stroke-width=".9" fill="none"/>`);
+
+// Hourglass — polished brass
+const hourglass=SV(`<defs>
+  <linearGradient id="hgg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#6a4010"/><stop offset="35%" stop-color="#c88020"/>
+    <stop offset="60%" stop-color="#e0a030"/><stop offset="100%" stop-color="#6a4010"/>
+  </linearGradient>
+</defs>
+<path d="M10 4 L34 4 L22 22 L34 40 L10 40 L22 22Z" fill="rgba(200,180,100,.12)" stroke="url(#hgg)" stroke-width="1.5"/>
+<rect x="9" y="3" width="26" height="3" rx="1.5" fill="url(#hgg)"/>
+<rect x="9" y="40" width="26" height="3" rx="1.5" fill="url(#hgg)"/>
+<path d="M18 28 Q22 26 26 28 Q22 32 18 28Z" fill="rgba(220,180,60,.6)" stroke="none"/>
+<path d="M12 7 Q16 5 20 6" stroke="rgba(255,220,100,.3)" stroke-width=".8" fill="none"/>`);
+
+// Key — ornate iron key
+const key=SV(`<defs>
+  <radialGradient id="keg" cx="40%" cy="35%">
+    <stop offset="0%" stop-color="#909090"/><stop offset="100%" stop-color="#303030"/>
+  </radialGradient>
+</defs>
+<circle cx="15" cy="14" r="8.5" fill="none" stroke="url(#keg)" stroke-width="2.2"/>
+<circle cx="15" cy="14" r="4.5" fill="none" stroke="url(#keg)" stroke-width="1.2"/>
+<circle cx="15" cy="14" r="2" fill="url(#keg)"/>
+<line x1="22" y1="19" x2="36" y2="39" stroke="url(#keg)" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="28" y1="28" x2="32" y2="32" stroke="url(#keg)" stroke-width="2" stroke-linecap="round"/>
+<line x1="33" y1="36" x2="37" y2="33" stroke="url(#keg)" stroke-width="2" stroke-linecap="round"/>
+<path d="M13 8 Q16 7 17 9" stroke="rgba(255,255,255,.3)" stroke-width=".8" fill="none"/>`);
+
+// Bell — polished bronze
+const bellSvg=SV(`<defs>
+  <linearGradient id="beg" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#604010"/><stop offset="30%" stop-color="#c08828"/>
+    <stop offset="55%" stop-color="#e0a830"/><stop offset="100%" stop-color="#604010"/>
+  </linearGradient>
+</defs>
+<path d="M22 5 Q10 11 10 26 L34 26 Q34 11 22 5Z" fill="url(#beg)" stroke="#805010" stroke-width=".8"/>
+<path d="M22 5 Q16 9 14 16" stroke="rgba(255,220,120,.3)" stroke-width="1" fill="none"/>
+<line x1="22" y1="5" x2="22" y2="2" stroke="url(#beg)" stroke-width="1.8"/>
+<ellipse cx="22" cy="27" rx="7" ry="2.5" fill="none" stroke="url(#beg)" stroke-width="1.5"/>
+<circle cx="22" cy="30" r="2" fill="url(#beg)" stroke="#805010" stroke-width=".7"/>
+<path d="M12 14 Q22 10 32 14" stroke="rgba(255,220,120,.2)" stroke-width=".8" fill="none"/>`);
+
+const spiral=SV(`<path d="M22 22 Q28 16 28 22 Q28 30 20 30 Q12 30 12 22 Q12 12 22 12 Q34 12 34 22 Q34 34 22 36" fill="none" stroke="#e0b84a" stroke-width="1.8" stroke-linecap="round"/>`);
+const tripleM=SV(`<text x="22" y="30" font-size="18" text-anchor="middle" fill="#d4c080" font-family="serif">☽○☾</text>`);
+
+const hornedGod=SV(`
+  <circle cx="22" cy="26" r="12" fill="none" stroke="#c8a85a" stroke-width="1.8"/>
+  <path d="M 14 16 Q 8 6 12 2" fill="none" stroke="#c8a85a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M 30 16 Q 36 6 32 2" fill="none" stroke="#c8a85a" stroke-width="1.8" stroke-linecap="round"/>
+`);
+
+const spiralGoddess=SV(`
+  <!-- Head -->
+  <circle cx="22" cy="6" r="4" fill="none" stroke="#c8a85a" stroke-width="1.6"/>
+  <!-- Left arm raised -->
+  <path d="M 18 10 Q 10 8 7 12" fill="none" stroke="#c8a85a" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Right arm raised -->
+  <path d="M 26 10 Q 34 8 37 12" fill="none" stroke="#c8a85a" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- Body/skirt: two curves meeting at a point at bottom -->
+  <path d="M 18 10 Q 12 18 14 28 Q 16 36 22 40 Q 28 36 30 28 Q 32 18 26 10"
+    fill="none" stroke="#c8a85a" stroke-width="1.6"/>
+  <!-- Spiral in belly -->
+  <path d="M 22 24 Q 25 21 25 24 Q 25 27 22 27 Q 19 27 19 24 Q 19 20 22 20"
+    fill="none" stroke="#c8a85a" stroke-width="1.1"/>
+`);
+const ouroboros=SV(`<circle cx="22" cy="22" r="14.5" fill="none" stroke="#70a848" stroke-width="3.5" stroke-dasharray="75 12"/><circle cx="22" cy="7.5" r="4.5" fill="#70a848"/><polygon points="20,6 24,6 22,3" fill="rgba(0,0,0,.5)"/>`);
+const infinity=SV(`<path d="M14 22 Q14 13 22 13 Q30 13 30 22 Q30 31 22 31 Q14 31 14 22" fill="none" stroke="#e0b84a" stroke-width="2"/><path d="M30 22 Q30 13 38 13 Q46 13 46 22 Q46 31 38 31 Q30 31 30 22" fill="none" stroke="#e0b84a" stroke-width="2"/>`,'0 0 52 44');
+const hexagram=SV(`<polygon points="22,4 38,32 6,32" fill="none" stroke="#e0b84a" stroke-width="1.3"/><polygon points="22,40 6,12 38,12" fill="none" stroke="#e0b84a" stroke-width="1.3"/>`);
+
+// ── RUNES (actual Elder Futhark glyphs) ──
+const rune=(g,c='#b878f8')=>SV(`<text x="22" y="36" font-size="30" text-anchor="middle" fill="${c}" font-family="serif">${g}</text>`);
+
+// ── PLANETS — all 10 astrological glyphs, drawn from their actual glyph constructions ──
+const P={
+  sun:     SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#e0c040" font-family="serif">☉</text>`),
+  moon:    SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#c8d0f0" font-family="serif">☽</text>`),
+  mercury: SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#90c8a8" font-family="serif">☿</text>`),
+  venus:   SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#d898b8" font-family="serif">♀</text>`),
+  mars:    SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#e06858" font-family="serif">♂</text>`),
+  jupiter: SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#c8a850" font-family="serif">♃</text>`),
+  saturn:  SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#b0a870" font-family="serif">♄</text>`),
+  uranus:  SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#80b8d8" font-family="serif">⛢</text>`),
+  neptune: SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#7090d8" font-family="serif">♆</text>`),
+  pluto:   SV(`<text x="22" y="32" font-size="28" text-anchor="middle" fill="#9878c0" font-family="serif">♇</text>`),
+};
+
+// ── TAROT — all 22 Major Arcana, Rider-Waite imagery ──
+const TC=(n,lbl,col,inner)=>SV(`<rect x="9" y="3" width="26" height="38" rx="2" fill="rgba(14,10,4,.9)" stroke="${col}" stroke-width="1.2"/>${inner}<text x="22" y="8" text-anchor="middle" font-size="3.8" fill="${col}" font-family="Cinzel,serif">${lbl}</text><text x="22" y="39.5" text-anchor="middle" font-size="4.5" fill="${col}" font-family="Cinzel,serif">${n}</text>`);
+const TAROT=[
+  // 0 The Fool — figure stepping off cliff, small dog at heel, sun rising
+  {id:'t0',name:'The Fool',cat:'tarot',r:TC('0','THE FOOL','#e0b84a',`
+    <circle cx="28" cy="12" r="4" fill="none" stroke="#e0b84a" stroke-width=".9"/>
+    <line x1="28" y1="9" x2="28" y2="7" stroke="#e0b84a" stroke-width="1" opacity=".6"/>
+    <path d="M13 30 Q14 22 18 20 Q20 19 21 21 L22 34" fill="none" stroke="#e0b84a" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="21" y1="21" x2="28" y2="18" stroke="#e0b84a" stroke-width="1" stroke-linecap="round"/>
+    <path d="M13 30 L10 35" stroke="#e0b84a" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M14 27 Q11 28 10 31 Q12 33 14 31" fill="none" stroke="#e0b84a" stroke-width=".9"/>
+    <line x1="9" y1="33" x2="35" y2="33" stroke="#e0b84a" stroke-width=".7" opacity=".4"/>
+  `)},
+  // I The Magician — figure at table, one arm up one down, infinity above
+  {id:'t1',name:'The Magician',cat:'tarot',r:TC('I','MAGICIAN','#e0b84a',`
+    <path d="M19 18 Q22 14 25 18 Q24 22 22 23 Q20 22 19 18Z" fill="none" stroke="#e0b84a" stroke-width=".9"/>
+    <line x1="22" y1="14" x2="22" y2="12" stroke="#e0b84a" stroke-width="1"/>
+    <path d="M19 23 L16 30 M25 23 L28 30" stroke="#e0b84a" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="16" y1="30" x2="28" y2="30" stroke="#e0b84a" stroke-width="1.3"/>
+    <line x1="28" y1="23" x2="31" y2="18" stroke="#e0b84a" stroke-width="1" stroke-linecap="round"/>
+    <line x1="16" y1="23" x2="13" y2="28" stroke="#e0b84a" stroke-width="1" stroke-linecap="round"/>
+    <path d="M18 10 Q22 7 26 10 Q22 13 18 10Z" fill="none" stroke="#e0b84a" stroke-width=".9"/>
+  `)},
+  // II High Priestess — seated figure between two pillars, one dark one light
+  {id:'t2',name:'High Priestess',cat:'tarot',r:TC('II','HIGH PRIESTESS','#9090d0',`
+    <rect x="11" y="10" width="3.5" height="22" fill="rgba(80,80,120,.5)" stroke="#9090d0" stroke-width=".9"/>
+    <rect x="29.5" y="10" width="3.5" height="22" fill="rgba(200,200,160,.2)" stroke="#9090d0" stroke-width=".9"/>
+    <text x="12.5" y="16" text-anchor="middle" font-size="3" fill="#9090d0">B</text>
+    <text x="31.5" y="16" text-anchor="middle" font-size="3" fill="#9090d0">J</text>
+    <path d="M17 22 Q22 16 27 22 Q24 27 22 28 Q20 27 17 22Z" fill="none" stroke="#9090d0" stroke-width="1"/>
+    <path d="M18 28 L18 33 M26 28 L26 33" stroke="#9090d0" stroke-width="1.1"/>
+    <path d="M18 33 L26 33" stroke="#9090d0" stroke-width="1"/>
+    <circle cx="22" cy="19" r="1.5" fill="#9090d0" opacity=".6"/>
+  `)},
+  // III The Empress — crowned woman seated, wheat field, heart shield
+  {id:'t3',name:'The Empress',cat:'tarot',r:TC('III','THE EMPRESS','#e090a0',`
+    <path d="M19 16 Q22 12 25 16 Q24 20 22 21 Q20 20 19 16Z" fill="none" stroke="#e090a0" stroke-width="1"/>
+    <path d="M20 14 Q22 11 24 14" fill="none" stroke="#e090a0" stroke-width="1.2"/>
+    <path d="M18 21 Q16 25 17 31 L27 31 Q28 25 26 21Z" fill="rgba(220,140,160,.2)" stroke="#e090a0" stroke-width="1"/>
+    <path d="M14 28 Q16 26 18 28 M26 28 Q28 26 30 28" stroke="#e090a0" stroke-width=".9" fill="none"/>
+    <path d="M16 32 Q17 35 18 33 Q19 31 20 33 Q21 35 22 33" stroke="#e090a0" stroke-width=".8" fill="none"/>
+  `)},
+  // IV The Emperor — armoured figure on throne, mountains behind
+  {id:'t4',name:'The Emperor',cat:'tarot',r:TC('IV','THE EMPEROR','#c09050',`
+    <path d="M16 12 L16 31 M28 12 L28 31" stroke="#c09050" stroke-width="2.5" opacity=".3"/>
+    <path d="M16 12 L28 12" stroke="#c09050" stroke-width="2" opacity=".3"/>
+    <path d="M19 18 Q22 14 25 18 Q24 22 22 23 Q20 22 19 18Z" fill="none" stroke="#c09050" stroke-width="1"/>
+    <rect x="18" y="23" width="8" height="9" fill="rgba(180,140,60,.2)" stroke="#c09050" stroke-width="1"/>
+    <line x1="18" y1="32" x2="26" y2="32" stroke="#c09050" stroke-width="1.2"/>
+    <path d="M19 17 Q22 15 25 17" stroke="#c09050" stroke-width="1.2" fill="none"/>
+    <path d="M27 26 L30 24 L30 28Z" fill="#c09050" opacity=".7"/>
+  `)},
+  // V The Hierophant — robed figure between pillars, two supplicants below
+  {id:'t5',name:'The Hierophant',cat:'tarot',r:TC('V','HIEROPHANT','#d4a050',`
+    <rect x="12" y="10" width="3" height="20" fill="none" stroke="#d4a050" stroke-width=".9" opacity=".5"/>
+    <rect x="29" y="10" width="3" height="20" fill="none" stroke="#d4a050" stroke-width=".9" opacity=".5"/>
+    <path d="M19 16 Q22 12 25 16 Q24 20 22 21 Q20 20 19 16Z" fill="none" stroke="#d4a050" stroke-width="1"/>
+    <path d="M20 14 L22 11 L24 14" fill="none" stroke="#d4a050" stroke-width="1.1"/>
+    <line x1="22" y1="21" x2="22" y2="32" stroke="#d4a050" stroke-width="1.2"/>
+    <line x1="18" y1="25" x2="26" y2="25" stroke="#d4a050" stroke-width="1"/>
+    <circle cx="17" cy="31" r="2" fill="none" stroke="#d4a050" stroke-width=".9"/>
+    <circle cx="27" cy="31" r="2" fill="none" stroke="#d4a050" stroke-width=".9"/>
+  `)},
+  // VI The Lovers — two figures, angel above blessing them, sun shining
+  {id:'t6',name:'The Lovers',cat:'tarot',r:TC('VI','THE LOVERS','#e090a0',`
+    <circle cx="22" cy="10" r="3.5" fill="rgba(240,200,80,.3)" stroke="#e0c040" stroke-width=".9"/>
+    <path d="M19 10 Q17 8 15 11 Q17 13 19 10Z M25 10 Q27 8 29 11 Q27 13 25 10Z" fill="#e0c040" opacity=".6"/>
+    <path d="M17 22 Q18 18 20 17 Q22 16 22 18" fill="none" stroke="#e090a0" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="17" y1="22" x2="15" y2="32" stroke="#e090a0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M27 22 Q26 18 24 17 Q22 16 22 18" fill="none" stroke="#e090a0" stroke-width="1.1" stroke-linecap="round"/>
+    <line x1="27" y1="22" x2="29" y2="32" stroke="#e090a0" stroke-width="1" stroke-linecap="round"/>
+  `)},
+  // VII The Chariot — armoured figure in chariot, two sphinxes (one black one white)
+  {id:'t7',name:'The Chariot',cat:'tarot',r:TC('VII','THE CHARIOT','#80a8e0',`
+    <rect x="13" y="19" width="18" height="12" fill="rgba(60,80,140,.3)" stroke="#80a8e0" stroke-width="1.1"/>
+    <path d="M19 17 Q22 13 25 17 Q24 20 22 21 Q20 20 19 17Z" fill="none" stroke="#80a8e0" stroke-width="1"/>
+    <path d="M13 19 Q22 15 31 19" fill="none" stroke="#80a8e0" stroke-width="1" opacity=".6"/>
+    <path d="M15 31 Q14 34 16 35 Q18 36 18 34" fill="none" stroke="white" stroke-width="1"/>
+    <path d="M29 31 Q30 34 28 35 Q26 36 26 34" fill="none" stroke="#404040" stroke-width="1"/>
+    <circle cx="22" cy="24" r="2.5" fill="none" stroke="#80a8e0" stroke-width="1"/>
+  `)},
+  // VIII Strength — woman gently closing lion's mouth, infinity above her head
+  {id:'t8',name:'Strength',cat:'tarot',r:TC('VIII','STRENGTH','#f0a040',`
+    <path d="M18 10 Q22 7 26 10 Q22 13 18 10Z" fill="none" stroke="#f0a040" stroke-width=".9"/>
+    <path d="M19 16 Q22 12 25 16 Q24 19 22 20 Q20 19 19 16Z" fill="none" stroke="#f0a040" stroke-width="1"/>
+    <path d="M17 20 Q14 22 13 26 Q14 30 17 31 Q20 32 22 30 Q24 32 27 31 Q30 30 31 26 Q30 22 27 20" fill="rgba(200,140,40,.2)" stroke="#f0a040" stroke-width="1.1"/>
+    <path d="M14 25 Q17 23 20 25" stroke="#f0a040" stroke-width=".9" fill="none"/>
+    <path d="M18 20 L16 24 M26 20 L28 24" stroke="#f0a040" stroke-width=".9"/>
+  `)},
+  // IX The Hermit — cloaked figure on peak holding lantern, staff
+  {id:'t9',name:'The Hermit',cat:'tarot',r:TC('IX','THE HERMIT','#d0c890',`
+    <path d="M20 18 Q22 14 24 18 Q23 21 22 22 Q21 21 20 18Z" fill="none" stroke="#d0c890" stroke-width="1"/>
+    <path d="M19 22 Q18 26 19 32 L25 32 Q26 26 25 22Z" fill="rgba(180,170,120,.2)" stroke="#d0c890" stroke-width="1"/>
+    <line x1="25" y1="28" x2="29" y2="32" stroke="#d0c890" stroke-width="1.3" stroke-linecap="round"/>
+    <rect x="26" y="22" width="4" height="5" rx="1" fill="rgba(240,220,100,.3)" stroke="#d0c890" stroke-width=".9"/>
+    <circle cx="28" cy="24" r="1.2" fill="#f0e060" opacity=".8"/>
+    <path d="M10 32 Q16 28 22 32 Q28 28 34 32" stroke="#d0c890" stroke-width=".8" fill="none" opacity=".5"/>
+  `)},
+  // X Wheel of Fortune — large spoked wheel with creatures at corners
+  {id:'t10',name:'Wheel of Fortune',cat:'tarot',r:TC('X','WHEEL','#e0b84a',`
+    <circle cx="22" cy="21" r="11" fill="none" stroke="#e0b84a" stroke-width="1.2"/>
+    <circle cx="22" cy="21" r="6" fill="none" stroke="#e0b84a" stroke-width=".9"/>
+    <circle cx="22" cy="21" r="2" fill="#e0b84a" opacity=".5"/>
+    $<line x1="28.0" y1="21.0" x2="33.0" y2="21.0" stroke="#e0b84a" stroke-width=".9"/><line x1="26.2" y1="25.2" x2="29.8" y2="28.8" stroke="#e0b84a" stroke-width=".9"/><line x1="22.0" y1="27.0" x2="22.0" y2="32.0" stroke="#e0b84a" stroke-width=".9"/><line x1="17.8" y1="25.2" x2="14.2" y2="28.8" stroke="#e0b84a" stroke-width=".9"/><line x1="16.0" y1="21.0" x2="11.0" y2="21.0" stroke="#e0b84a" stroke-width=".9"/><line x1="17.8" y1="16.8" x2="14.2" y2="13.2" stroke="#e0b84a" stroke-width=".9"/><line x1="22.0" y1="15.0" x2="22.0" y2="10.0" stroke="#e0b84a" stroke-width=".9"/><line x1="26.2" y1="16.8" x2="29.8" y2="13.2" stroke="#e0b84a" stroke-width=".9"/>
+    <text x="11" y="13" font-size="4" fill="#e0b84a" opacity=".7">T</text>
+    <text x="31" y="13" font-size="4" fill="#e0b84a" opacity=".7">A</text>
+    <text x="11" y="33" font-size="4" fill="#e0b84a" opacity=".7">R</text>
+    <text x="31" y="33" font-size="4" fill="#e0b84a" opacity=".7">O</text>
+  `)},
+  // XI Justice — robed figure with sword and scales
+  {id:'t11',name:'Justice',cat:'tarot',r:TC('XI','JUSTICE','#c0c8e0',`
+    <line x1="22" y1="10" x2="22" y2="32" stroke="#c0c8e0" stroke-width="1.3"/>
+    <line x1="12" y1="16" x2="32" y2="16" stroke="#c0c8e0" stroke-width="1.3"/>
+    <line x1="12" y1="16" x2="10" y2="24" stroke="#c0c8e0" stroke-width="1"/>
+    <line x1="32" y1="16" x2="34" y2="24" stroke="#c0c8e0" stroke-width="1"/>
+    <path d="M8 24 Q10 28 12 24" fill="none" stroke="#c0c8e0" stroke-width="1.2"/>
+    <path d="M32 24 Q34 28 36 24" fill="none" stroke="#c0c8e0" stroke-width="1.2"/>
+    <line x1="16" y1="32" x2="28" y2="32" stroke="#c0c8e0" stroke-width="1.5"/>
+  `)},
+  // XII The Hanged Man — figure hanging upside-down from a T-cross, one leg bent
+  {id:'t12',name:'The Hanged Man',cat:'tarot',r:TC('XII','HANGED MAN','#8090d0',`
+    <line x1="15" y1="12" x2="29" y2="12" stroke="#8090d0" stroke-width="1.5"/>
+    <line x1="15" y1="12" x2="15" y2="22" stroke="#8090d0" stroke-width="1.5"/>
+    <line x1="29" y1="12" x2="29" y2="22" stroke="#8090d0" stroke-width="1.5"/>
+    <line x1="22" y1="12" x2="22" y2="16" stroke="#8090d0" stroke-width="1"/>
+    <path d="M20 18 Q22 16 24 18 Q23 21 22 22 Q21 21 20 18Z" fill="none" stroke="#8090d0" stroke-width="1"/>
+    <line x1="22" y1="22" x2="22" y2="30" stroke="#8090d0" stroke-width="1.1"/>
+    <path d="M22 26 L18 22 M22 26 L18 30" stroke="#8090d0" stroke-width="1" stroke-linecap="round"/>
+    <path d="M22 26 Q26 28 25 32" stroke="#8090d0" stroke-width="1" stroke-linecap="round"/>
+  `)},
+  // XIII Death — skeleton knight on white horse, figures falling, sun between towers
+  {id:'t13',name:'Death',cat:'tarot',r:TC('XIII','DEATH','#808090',`
+    <circle cx="22" cy="29" r="5" fill="none" stroke="#808090" stroke-width="1.1"/>
+    <path d="M19 26 Q22 24 25 26" fill="none" stroke="#808090" stroke-width=".9"/>
+    <line x1="22" y1="24" x2="22" y2="29" stroke="#808090" stroke-width="1.1"/>
+    <path d="M15 29 L19 24 M29 29 L25 24" stroke="#808090" stroke-width="1" stroke-linecap="round"/>
+    <path d="M14 22 L18 18 L22 22 L18 26Z" fill="rgba(200,200,210,.2)" stroke="#808090" stroke-width=".9"/>
+    <line x1="10" y1="32" x2="34" y2="32" stroke="#808090" stroke-width=".8" opacity=".5"/>
+    <path d="M14 32 L14 28 M30 32 L30 28" stroke="#808090" stroke-width="1.1"/>
+    <circle cx="22" cy="14" r="3" fill="rgba(240,200,60,.3)" stroke="#e0c040" stroke-width=".8"/>
+  `)},
+  // XIV Temperance — angelic figure pouring water between two cups
+  {id:'t14',name:'Temperance',cat:'tarot',r:TC('XIV','TEMPERANCE','#80c8c0',`
+    <path d="M19 14 Q22 10 25 14 Q24 18 22 19 Q20 18 19 14Z" fill="none" stroke="#80c8c0" stroke-width="1"/>
+    <path d="M20 14 Q18 12 17 13 Q16 15 18 16Z M24 14 Q26 12 27 13 Q28 15 26 16Z" fill="#80c8c0" opacity=".5"/>
+    <path d="M18 19 L15 30 M26 19 L29 30" stroke="#80c8c0" stroke-width="1.1" stroke-linecap="round"/>
+    <rect x="12" y="26" width="5" height="5" rx="1" fill="rgba(60,160,200,.3)" stroke="#80c8c0" stroke-width=".9"/>
+    <rect x="27" y="26" width="5" height="5" rx="1" fill="rgba(60,160,200,.3)" stroke="#80c8c0" stroke-width=".9"/>
+    <path d="M17 28 Q22 22 27 28" fill="none" stroke="#80c8c0" stroke-width="1" stroke-dasharray="2,1"/>
+  `)},
+  // XV The Devil — horned devil on plinth, two chained figures below
+  {id:'t15',name:'The Devil',cat:'tarot',r:TC('XV','THE DEVIL','#b04040',`
+    <path d="M18 13 Q22 9 26 13 Q24 17 22 18 Q20 17 18 13Z" fill="none" stroke="#b04040" stroke-width="1"/>
+    <path d="M18 12 L15 8 M26 12 L29 8" stroke="#b04040" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="18" y="18" width="8" height="5" rx="1" fill="rgba(150,40,40,.3)" stroke="#b04040" stroke-width="1"/>
+    <path d="M16 23 L14 31 Q16 33 18 31 L19 23" stroke="#b04040" stroke-width="1" fill="none"/>
+    <path d="M28 23 L30 31 Q28 33 26 31 L25 23" stroke="#b04040" stroke-width="1" fill="none"/>
+    <line x1="19" y1="23" x2="22" y2="20" stroke="#b04040" stroke-width=".9"/>
+    <line x1="25" y1="23" x2="22" y2="20" stroke="#b04040" stroke-width=".9"/>
+    <path d="M14 8 Q22 5 30 8" stroke="#b04040" stroke-width=".8" fill="none" opacity=".5"/>
+  `)},
+  // XVI The Tower — tall tower struck by lightning, figures falling, crown flying off
+  {id:'t16',name:'The Tower',cat:'tarot',r:TC('XVI','THE TOWER','#e05030',`
+    <rect x="17" y="10" width="10" height="21" fill="rgba(120,50,20,.3)" stroke="#e05030" stroke-width="1.2"/>
+    <path d="M15 10 L22 6 L29 10Z" fill="rgba(120,50,20,.4)" stroke="#e05030" stroke-width="1.1"/>
+    <path d="M22 6 L20 3 M22 6 L24 3" stroke="#e05030" stroke-width="1" stroke-linecap="round"/>
+    <path d="M10 14 Q14 10 17 14" fill="none" stroke="#f0c040" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M16 16 L18 20 M20 14 L22 18" stroke="#f0c040" stroke-width="1" opacity=".7"/>
+    <path d="M22 20 L19 22 L18 27" stroke="#e05030" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M22 20 L25 22 L26 27" stroke="#e05030" stroke-width="1.2" stroke-linecap="round"/>
+    <rect x="20" y="14" width="4" height="4" fill="none" stroke="#e05030" stroke-width=".8"/>
+  `)},
+  // XVII The Star — naked figure pouring water, large star and seven smaller stars
+  {id:'t17',name:'The Star',cat:'tarot',r:TC('XVII','THE STAR','#80c8e8',`
+    <path d="M22,9 L23.2,13 L27,13 L24,15.5 L25.2,19.5 L22,17 L18.8,19.5 L20,15.5 L17,13 L20.8,13Z" fill="none" stroke="#80c8e8" stroke-width="1"/>
+    <circle cx="13" cy="13" r="1.5" fill="#80c8e8" opacity=".7"/>
+    <circle cx="31" cy="13" r="1.5" fill="#80c8e8" opacity=".7"/>
+    <circle cx="11" cy="20" r="1.2" fill="#80c8e8" opacity=".6"/>
+    <circle cx="33" cy="20" r="1.2" fill="#80c8e8" opacity=".6"/>
+    <path d="M19 22 Q22 19 25 22" fill="none" stroke="#80c8e8" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M17 25 L19 32 M27 25 L25 32" stroke="#80c8e8" stroke-width="1" stroke-linecap="round"/>
+    <path d="M15 30 Q22 27 29 30" fill="none" stroke="#80c8e8" stroke-width=".8" opacity=".5"/>
+  `)},
+  // XVIII The Moon — moon with face, two towers, dog and wolf howling, crayfish
+  {id:'t18',name:'The Moon',cat:'tarot',r:TC('XVIII','THE MOON','#9090d0',`
+    <path d="M28 9 A13 13 0 1 0 28 35 A9 9 0 1 1 28 9Z" fill="rgba(180,180,220,.25)" stroke="#9090d0" stroke-width="1.5"/>
+    <circle cx="18" cy="22" r="2.5" fill="none" stroke="#9090d0" stroke-width=".9"/>
+    <path d="M16 22 Q18 20 20 22" fill="none" stroke="#9090d0" stroke-width=".9"/>
+    <path d="M15 25 Q18 27 21 25" fill="none" stroke="#9090d0" stroke-width=".8"/>
+  `)},
+  // XIX The Sun — radiant sun, child on horse, sunflowers, wall behind
+  {id:'t19',name:'The Sun',cat:'tarot',r:TC('XIX','THE SUN','#f0c840',`
+    <circle cx="22" cy="22" r="10" fill="rgba(240,200,60,.25)" stroke="#f0c840" stroke-width="1.5"/>
+    <circle cx="22" cy="22" r="5" fill="#f0c840" opacity=".5"/>
+    <line x1="32.0" y1="22.0" x2="36.0" y2="22.0" stroke="#f0c840" stroke-width="1.2"/><line x1="30.7" y1="27.0" x2="34.1" y2="29.0" stroke="#f0c840" stroke-width="1.2"/><line x1="27.0" y1="30.7" x2="29.0" y2="34.1" stroke="#f0c840" stroke-width="1.2"/><line x1="22.0" y1="32.0" x2="22.0" y2="36.0" stroke="#f0c840" stroke-width="1.2"/><line x1="17.0" y1="30.7" x2="15.0" y2="34.1" stroke="#f0c840" stroke-width="1.2"/><line x1="13.3" y1="27.0" x2="9.9" y2="29.0" stroke="#f0c840" stroke-width="1.2"/><line x1="12.0" y1="22.0" x2="8.0" y2="22.0" stroke="#f0c840" stroke-width="1.2"/><line x1="13.3" y1="17.0" x2="9.9" y2="15.0" stroke="#f0c840" stroke-width="1.2"/><line x1="17.0" y1="13.3" x2="15.0" y2="9.9" stroke="#f0c840" stroke-width="1.2"/><line x1="22.0" y1="12.0" x2="22.0" y2="8.0" stroke="#f0c840" stroke-width="1.2"/><line x1="27.0" y1="13.3" x2="29.0" y2="9.9" stroke="#f0c840" stroke-width="1.2"/><line x1="30.7" y1="17.0" x2="34.1" y2="15.0" stroke="#f0c840" stroke-width="1.2"/>
+  `)},
+  // XX Judgement — angel with trumpet above, figures rising from coffins below
+  {id:'t20',name:'Judgement',cat:'tarot',r:TC('XX','JUDGEMENT','#d0a060',`
+    <path d="M19 12 Q22 8 25 12 Q24 16 22 17 Q20 16 19 12Z" fill="none" stroke="#d0a060" stroke-width="1"/>
+    <path d="M20 12 Q18 10 17 11 Q16 13 18 14Z M24 12 Q26 10 27 11 Q28 13 26 14Z" fill="#d0a060" opacity=".5"/>
+    <line x1="25" y1="13" x2="31" y2="10" stroke="#d0a060" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M31 10 Q33 10 33 12 Q33 13 31 13Z" fill="#d0a060" opacity=".7"/>
+    <path d="M14 25 L14 32 Q16 34 18 32 L18 25Z" fill="rgba(180,140,60,.2)" stroke="#d0a060" stroke-width=".9"/>
+    <path d="M21 26 L21 32 Q23 34 25 32 L25 26Z" fill="rgba(180,140,60,.2)" stroke="#d0a060" stroke-width=".9"/>
+    <path d="M15 25 Q16 22 17 23" fill="none" stroke="#d0a060" stroke-width=".9"/>
+    <path d="M22 26 Q23 23 24 24" fill="none" stroke="#d0a060" stroke-width=".9"/>
+  `)},
+  // XXI The World — dancing figure in wreath oval, four creatures at corners
+  {id:'t21',name:'The World',cat:'tarot',r:TC('XXI','THE WORLD','#70a850',`
+    <circle cx="22" cy="22" r="13" fill="rgba(40,100,180,.3)" stroke="#70a850" stroke-width="1.5"/>
+    <ellipse cx="22" cy="22" rx="6" ry="13" fill="none" stroke="#70a850" stroke-width="1"/>
+    <line x1="9" y1="22" x2="35" y2="22" stroke="#70a850" stroke-width="1"/>
+    <ellipse cx="22" cy="22" rx="13" ry="5" fill="none" stroke="#70a850" stroke-width=".8" opacity=".6"/>
+    <path d="M12 14 Q22 10 32 14" fill="none" stroke="#70a850" stroke-width=".8" opacity=".5"/>
+    <path d="M12 30 Q22 34 32 30" fill="none" stroke="#70a850" stroke-width=".8" opacity=".5"/>
+  `)}
+];
+const OBJS=[
+  // FIRE
+  {id:'cw',name:'White Candle',cat:'fire',render:CANDLE('#f5f0e8')},
+  {id:'cbl',name:'Black Candle',cat:'fire',render:CANDLE('#1a0e10')},
+  {id:'cr',name:'Red Candle',cat:'fire',render:CANDLE('#cc3030')},
+  {id:'cg',name:'Green Candle',cat:'fire',render:CANDLE('#2a6030')},
+  {id:'cp',name:'Purple Candle',cat:'fire',render:CANDLE('#7030a0')},
+  {id:'cgo',name:'Gold Candle',cat:'fire',render:CANDLE('#c8a830')},
+  {id:'cb',name:'Blue Candle',cat:'fire',render:CANDLE('#204080')},
+  {id:'cpk',name:'Pink Candle',cat:'fire',render:CANDLE('#d87090')},
+  {id:'co',name:'Orange Candle',cat:'fire',render:CANDLE('#d07020')},
+  {id:'inc',name:'Incense',cat:'fire',render:INC},
+  {id:'e-fire',name:'Fire △',cat:'fire',render:E.fire},
+  // EARTH
+  {id:'qz',name:'Clear Quartz',cat:'earth',render:cry('#e8f4ff','#c0d8f0','#a0c0e8')},
+  {id:'am',name:'Amethyst',cat:'earth',render:cry('#9060c8','#c090e0','#7040a0')},
+  {id:'rq',name:'Rose Quartz',cat:'earth',render:cry('#e89090','#f0b8b8','#d87070')},
+  {id:'ob',name:'Obsidian',cat:'earth',render:cry('#181820','#302840','#100c18')},
+  {id:'ci',name:'Citrine',cat:'earth',render:cry('#e8c840','#f0d870','#c0a020')},
+  {id:'ml',name:'Malachite',cat:'earth',render:cry('#208040','#40a860','#106030')},
+  {id:'lp',name:'Lapis Lazuli',cat:'earth',render:cry('#2040a0','#4060d0','#103080')},
+  {id:'sl',name:'Selenite',cat:'earth',render:cry('#e8eef8','#f0f4ff','#d0d8e8')},
+  {id:'te',name:'Tiger Eye',cat:'earth',render:cry('#a07030','#c09040','#805020')},
+  {id:'bwl',name:'Offering Bowl',cat:'earth',render:bowl('#e0b84a')},
+  {id:'mortar',name:'Mortar',cat:'earth',render:mortar},
+  {id:'e-earth',name:'Earth ▽',cat:'earth',render:E.earth},
+  // WATER
+  {id:'chalice',name:'Chalice',cat:'water',render:chalice},
+  {id:'cauldron',name:'Cauldron',cat:'water',render:cauldron},
+  {id:'mirror',name:'Mirror',cat:'water',render:mirrorSvg},
+  {id:'tripm',name:'Triple Moon',cat:'water',render:tripleM},
+  {id:'horned-god',name:'Horned God',cat:'spirit',render:hornedGod},
+  {id:'spiral-goddess',name:'Spiral Goddess',cat:'spirit',render:spiralGoddess},
+  {id:'shell',name:'Shell',cat:'water',render:shellSvg},
+  {id:'wdrop',name:'Water',cat:'water',render:waterDrop},
+  {id:'e-water',name:'Water ▽',cat:'water',render:E.water},
+  // AIR
+  {id:'feather',name:'Feather',cat:'air',render:feather},
+  {id:'wand',name:'Wand',cat:'air',render:wand},
+  {id:'sword',name:'Sword',cat:'air',render:sword},
+  {id:'bell',name:'Bell',cat:'air',render:bellSvg},
+  {id:'staff',name:'Staff',cat:'air',render:staff},
+  {id:'e-air',name:'Air △',cat:'air',render:E.air},
+  // SPIRIT
+  {id:'pentacle',name:'Pentacle',cat:'spirit',render:pentacle},
+  {id:'eye',name:'Third Eye',cat:'spirit',render:eyeSvg},
+  {id:'sun',name:'Sun',cat:'spirit',render:sunSvg()},
+  {id:'yin',name:'Yin Yang',cat:'spirit',render:yinyang()},
+  {id:'spiral',name:'Spiral',cat:'spirit',render:spiral},
+  {id:'ouroboros',name:'Ouroboros',cat:'spirit',render:ouroboros},
+  {id:'infinity',name:'Infinity',cat:'spirit',render:infinity},
+  {id:'hexagram',name:'Hexagram',cat:'spirit',render:hexagram},
+  {id:'crystal-ball',name:'Crystal Ball',cat:'spirit',render:crystalBall},
+  {id:'hourglass',name:'Hourglass',cat:'spirit',render:hourglass},
+  {id:'key',name:'Key',cat:'spirit',render:key},
+  {id:'e-spirit',name:'Spirit ◎',cat:'spirit',render:E.spirit},
+  // CHAOS
+  {id:'chaos',name:'Chaos Star',cat:'chaos',render:chaosStar()},
+  {id:'athame',name:'Athame',cat:'chaos',render:athame},
+  {id:'r-fehu',name:'Fehu ᚠ',cat:'chaos',render:rune('ᚠ')},
+  {id:'r-thu',name:'Thurisaz ᚦ',cat:'chaos',render:rune('ᚦ')},
+  {id:'r-algiz',name:'Algiz ᛉ',cat:'chaos',render:rune('ᛉ')},
+  {id:'r-sow',name:'Sowilo ᛋ',cat:'chaos',render:rune('ᛋ')},
+  {id:'r-tiwaz',name:'Tiwaz ᛏ',cat:'chaos',render:rune('ᛏ')},
+  {id:'r-berkana',name:'Berkana ᛒ',cat:'chaos',render:rune('ᛒ')},
+  {id:'r-othala',name:'Othala ᛟ',cat:'chaos',render:rune('ᛟ')},
+  {id:'r-dagaz',name:'Dagaz ᛞ',cat:'chaos',render:rune('ᛞ')},
+  {id:'r-isa',name:'Isa ᛁ',cat:'chaos',render:rune('ᛁ')},
+  {id:'r-laguz',name:'Laguz ᛚ',cat:'chaos',render:rune('ᛚ')},
+  // PLANETS
+  {id:'pl-sun',name:'Sun ☉',cat:'planet',render:P.sun},
+  {id:'pl-moon',name:'Moon ☽',cat:'planet',render:P.moon},
+  {id:'pl-merc',name:'Mercury ☿',cat:'planet',render:P.mercury},
+  {id:'pl-ven',name:'Venus ♀',cat:'planet',render:P.venus},
+  {id:'pl-mars',name:'Mars ♂',cat:'planet',render:P.mars},
+  {id:'pl-jup',name:'Jupiter ♃',cat:'planet',render:P.jupiter},
+  {id:'pl-sat',name:'Saturn ♄',cat:'planet',render:P.saturn},
+  {id:'pl-ura',name:'Uranus ⛢',cat:'planet',render:P.uranus},
+  {id:'pl-nep',name:'Neptune ♆',cat:'planet',render:P.neptune},
+  {id:'pl-plu',name:'Pluto ♇',cat:'planet',render:P.pluto},
+  {id:'pl-sig',name:'Linking Sigil ·⍼',cat:'planet',render:SV(`<text x="22" y="34" font-size="22" text-anchor="middle" fill="#c8a85a" font-family="sans-serif">·⍼</text>`)},
+  // OTHER
+  {id:'broom',name:'Besom',cat:'other',render:broom},
+  {id:'pent2',name:'Pentagram',cat:'other',render:SV(`<path d="M22.0,4.0 L32.6,36.6 L4.9,16.4 L39.1,16.4 L11.4,36.6Z" fill="none" stroke="#e0b84a" stroke-width="1.5" stroke-linejoin="round"/>`)},
+  ...TAROT.map(t=>({...t,render:t.r,cat:'tarot'})),
+];
+
+const CATS_DEF=[
+  {id:'all',label:'All'},{id:'fire',label:'🔥 Fire'},{id:'earth',label:'🌿 Earth'},
+  {id:'water',label:'💧 Water'},{id:'air',label:'💨 Air'},{id:'spirit',label:'✦ Spirit'},
+  {id:'chaos',label:'⚡ Chaos'},{id:'planet',label:'☿ Planets'},{id:'tarot',label:'🃏 Tarot'},
+  {id:'other',label:'☽ Other'},{id:'custom',label:'📁 Custom'},
+];
+
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+const AZ=['N','E','S','W','NE','SE','SW','NW','C'];
+let ST={
+  altarName:'The Sacred Space',intention:'',
+  zones:{N:[],E:[],S:[],W:[],NE:[],SE:[],SW:[],NW:[],C:[]},
+  dirs:{N:{name:'North',element:'Earth'},E:{name:'East',element:'Air'},S:{name:'South',element:'Fire'},W:{name:'West',element:'Water'}},
+  backdrop:'velvet',starsOn:false,ritualMode:false,hideLabels:false,pentaOn:false,customObjs:[],customBd:null,
+};
+function ldSt(){try{const d=localStorage.getItem('altarv5');if(d){const p=JSON.parse(d);ST={...ST,...p};}}catch(e){}}
+function svSt(){try{localStorage.setItem('altarv5',JSON.stringify(ST));}catch(e){}}
+
+// ════════════════════════════════════════════
+//  ANIMATED BACKDROPS
+// ════════════════════════════════════════════
+let bdFrame=null;
+function stopBd(){if(bdFrame){cancelAnimationFrame(bdFrame);bdFrame=null;}}
+
+const BDS={
+  velvet:{name:'Velvet',animate:false,draw(ctx,w,h){
+    ctx.fillStyle='#0e0a16';ctx.fillRect(0,0,w,h);
+    for(let y=0;y<h;y+=2)for(let x=0;x<w;x+=2){const v=.04+.025*Math.sin(x*.09)*Math.cos(y*.09);ctx.fillStyle=`rgba(95,55,120,${v})`;ctx.fillRect(x,y,2,2);}
+    const g=ctx.createRadialGradient(w/2,h*.3,0,w/2,h/2,w*.85);g.addColorStop(0,'rgba(90,35,110,.5)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }},
+  void:{name:'Void',animate:false,draw(ctx,w,h){
+    const g=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,Math.max(w,h)*.75);g.addColorStop(0,'#0d0818');g.addColorStop(.6,'#06040e');g.addColorStop(1,'#000');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }},
+  slate:{name:'Slate Stone',animate:false,draw(ctx,w,h){
+    ctx.fillStyle='#14181e';ctx.fillRect(0,0,w,h);
+    for(let i=0;i<700;i++){const x=Math.random()*w,y=Math.random()*h,l=10+Math.random()*50,a=Math.random()*Math.PI;ctx.strokeStyle=`rgba(${120+Math.random()*40},${130+Math.random()*40},${150+Math.random()*40},${.025+Math.random()*.05})`;ctx.lineWidth=Math.random()*1.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l);ctx.stroke();}
+    const g=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,w*.6);g.addColorStop(0,'rgba(80,100,130,.3)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }},
+  nebula:{name:'Nebula',animate:true,_t:0,draw(ctx,w,h){
+    this._t=(this._t||0)+.003;
+    ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    [[.3,.3,'rgba(80,30,140,'],[.7,.5,'rgba(30,60,150,'],[.5,.7,'rgba(140,30,80,'],[.4,.6,'rgba(30,100,80,']].forEach(([fx,fy,col])=>{
+      const px=fx*w+Math.sin(this._t+fx*3)*30,py=fy*h+Math.cos(this._t+fy*2)*25;
+      const g=ctx.createRadialGradient(px,py,0,px,py,180);g.addColorStop(0,col+'.55)');g.addColorStop(.4,col+'.22)');g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    });
+  }},
+  clouds:{name:'Clouds',animate:true,draw(ctx,w,h){
+    // Re-init when canvas size changes
+    if(!this._cls||this._pw!==w||this._ph!==h){
+      this._pw=w;this._ph=h;this._t=0;
+      // Each cloud mass: a spine of points across which we smear many tiny soft discs
+      // This creates the wispy, irregular, horizontally-stretched look of real clouds
+      this._cls=Array.from({length:14},()=>{
+        const cx=Math.random()*w*1.4-w*.2;
+        const cy=h*(0.06+Math.random()*0.55);
+        const span=w*(0.18+Math.random()*0.32); // horizontal extent
+        const height=h*(0.04+Math.random()*0.1);
+        // Generate ~30 micro-puffs scattered around the spine
+        const puffs=Array.from({length:28+Math.floor(Math.random()*20)},()=>({
+          ox:(Math.random()-.5)*span*1.3,
+          oy:(Math.random()-.5)*height*2.2,
+          r: h*(0.025+Math.random()*0.07),
+          a: 0.06+Math.random()*0.14,
+        }));
+        return {cx,cy,puffs,speed:0.06+Math.random()*0.14,vy:(Math.random()-.5)*0.025};
+      });
+    }
+    this._t=(this._t||0)+1;
+
+    // Daytime blue sky — rich gradient from deep blue at top to pale horizon
+    const sky=ctx.createLinearGradient(0,0,0,h);
+    sky.addColorStop(0,'#1a3a6e');
+    sky.addColorStop(0.35,'#2a5598');
+    sky.addColorStop(0.7,'#4878c0');
+    sky.addColorStop(1,'#8ab4d8');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,w,h);
+
+    // Subtle haze band near horizon
+    const haze=ctx.createLinearGradient(0,h*.6,0,h);
+    haze.addColorStop(0,'rgba(200,220,240,0)');
+    haze.addColorStop(1,'rgba(200,220,240,0.18)');
+    ctx.fillStyle=haze;ctx.fillRect(0,0,w,h);
+
+    // Draw clouds — each is a field of overlapping soft translucent discs
+    this._cls.forEach(c=>{
+      c.cx+=c.speed;
+      c.cy+=c.vy;
+      // Seamless horizontal wrap
+      if(c.cx>w+w*.25)c.cx=-w*.25;
+      if(c.cx<-w*.25)c.cx=w+w*.25;
+      // Gentle vertical bounce
+      if(c.cy<h*.02||c.cy>h*.65)c.vy*=-1;
+
+      c.puffs.forEach(p=>{
+        const px=c.cx+p.ox, py=c.cy+p.oy;
+        // Elliptical gradient — wider than tall — gives wispy stretched look
+        ctx.save();
+        ctx.translate(px,py);
+        ctx.scale(2.2,1); // stretch horizontally
+        const g=ctx.createRadialGradient(0,0,0,0,0,p.r);
+        g.addColorStop(0,`rgba(255,255,255,${p.a})`);
+        g.addColorStop(0.4,`rgba(240,245,255,${p.a*0.6})`);
+        g.addColorStop(1,'rgba(220,235,255,0)');
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fill();
+        ctx.restore();
+      });
+    });
+
+    // Bright sun glow top-right
+    const sunG=ctx.createRadialGradient(w*.85,h*.08,0,w*.85,h*.08,h*.35);
+    sunG.addColorStop(0,'rgba(255,245,200,0.18)');
+    sunG.addColorStop(0.4,'rgba(255,235,180,0.07)');
+    sunG.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=sunG;ctx.fillRect(0,0,w,h);
+  }},
+  forest:{name:'Forest',animate:true,draw(ctx,w,h){
+    // Re-init when canvas size changes
+    if(!this._pts||this._pw!==w||this._ph!==h){
+      this._t=0;this._pw=w;this._ph=h;
+      // Floating dust motes / pollen — tiny bright particles that drift slowly
+      // in the shafts of light. No hard shapes — just soft glowing points.
+      this._pts=Array.from({length:120},()=>({
+        x:Math.random()*w,
+        y:Math.random()*h,
+        vx:(Math.random()-.5)*0.18,
+        vy:-(0.05+Math.random()*0.12), // very slowly rising
+        r:1+Math.random()*2.5,
+        op:0.2+Math.random()*0.55,
+        phase:Math.random()*Math.PI*2, // for gentle wobble
+        bright:Math.random()>0.7, // ~30% are brighter golden motes
+      }));
+    }
+    this._t=(this._t||0)+1;
+
+    // Deep forest background — very dark green-black
+    const bg=ctx.createLinearGradient(0,0,0,h);
+    bg.addColorStop(0,'#020804');
+    bg.addColorStop(0.4,'#050f04');
+    bg.addColorStop(1,'#080e05');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+
+    // === LIGHT SHAFTS — the hero element ===
+    // Multiple beams from upper canopy, each slowly swaying
+    const shafts=[
+      {fx:0.12,fw:0.07,phase:0.0,bright:0.10},
+      {fx:0.28,fw:0.05,phase:1.4,bright:0.07},
+      {fx:0.45,fw:0.10,phase:0.7,bright:0.13},
+      {fx:0.60,fw:0.06,phase:2.1,bright:0.08},
+      {fx:0.75,fw:0.08,phase:0.3,bright:0.11},
+      {fx:0.88,fw:0.05,phase:1.8,bright:0.06},
+    ];
+    shafts.forEach(s=>{
+      const sway=Math.sin(this._t*0.008+s.phase)*w*0.04;
+      const cx=w*s.fx+sway;
+      const half=w*s.fw;
+      // Brightness pulses very gently
+      const pulse=s.bright*(0.85+0.15*Math.sin(this._t*0.011+s.phase));
+
+      // Each shaft: wide radial gradient fanned from top
+      // We draw it as a tapered polygon with a soft horizontal gradient
+      const sg=ctx.createLinearGradient(cx-half*2,0,cx+half*2,0);
+      sg.addColorStop(0,'rgba(0,0,0,0)');
+      sg.addColorStop(0.35,`rgba(180,230,100,${pulse*0.55})`);
+      sg.addColorStop(0.5,`rgba(210,245,140,${pulse})`);
+      sg.addColorStop(0.65,`rgba(180,230,100,${pulse*0.55})`);
+      sg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=sg;
+
+      // Tapered shaft: narrow at top, wider at bottom
+      ctx.beginPath();
+      ctx.moveTo(cx-half*0.3,0);
+      ctx.lineTo(cx+half*0.3,0);
+      ctx.lineTo(cx+half*2.2,h);
+      ctx.lineTo(cx-half*2.2,h);
+      ctx.closePath();
+      ctx.fill();
+
+      // Soft bright core line down the centre of each shaft
+      const core=ctx.createLinearGradient(0,0,0,h);
+      core.addColorStop(0,`rgba(220,255,160,${pulse*0.4})`);
+      core.addColorStop(0.6,`rgba(200,240,130,${pulse*0.15})`);
+      core.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=core;
+      ctx.beginPath();
+      ctx.moveTo(cx-half*0.15,0);
+      ctx.lineTo(cx+half*0.15,0);
+      ctx.lineTo(cx+half*0.7,h);
+      ctx.lineTo(cx-half*0.7,h);
+      ctx.closePath();
+      ctx.fill();
+    });
+
+    // Overall canopy ambient — soft green tint from above
+    const amb=ctx.createRadialGradient(w*.5,0,0,w*.5,h*.25,w*1.1);
+    amb.addColorStop(0,'rgba(60,140,30,0.14)');
+    amb.addColorStop(0.5,'rgba(30,80,15,0.06)');
+    amb.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=amb;ctx.fillRect(0,0,w,h);
+
+    // === DUST MOTES — tiny soft particles floating in the light ===
+    this._pts.forEach(p=>{
+      // Gentle sideways sway
+      p.x+=p.vx+Math.sin(this._t*0.014+p.phase)*0.15;
+      p.y+=p.vy;
+      // Wrap
+      if(p.y<-5)p.y=h+5;
+      if(p.x<-5)p.x=w+5;
+      if(p.x>w+5)p.x=-5;
+
+      // Twinkle opacity
+      const twinkle=p.op*(0.7+0.3*Math.sin(this._t*0.04+p.phase));
+
+      // Only draw motes that land in a shaft of light — sample brightness at position
+      // Approximate: check if x is near any shaft centre
+      let inLight=0;
+      shafts.forEach(s=>{
+        const sway=Math.sin(this._t*0.008+s.phase)*w*0.04;
+        const cx=w*s.fx+sway;
+        const half=w*s.fw;
+        const dist=Math.abs(p.x-cx);
+        const shaftW=half*2.2*(p.y/h); // shaft widens toward bottom
+        if(dist<shaftW)inLight=Math.max(inLight,(1-dist/shaftW)*s.bright*8);
+      });
+      if(inLight<0.01)return; // invisible outside shafts
+
+      const col=p.bright?`rgba(240,255,180,${twinkle*inLight})`:`rgba(200,240,150,${twinkle*inLight*0.7})`;
+      const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+      g.addColorStop(0,col);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=g;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+    });
+  }},
+  fire:{name:'Sacred Fire',animate:true,draw(ctx,w,h){
+    // Re-init particles whenever canvas size changes
+    if(!this._ps||this._pw!==w||this._ph!==h){
+      this._pw=w;this._ph=h;
+      this._ps=Array.from({length:90},(_,i)=>({
+        x:w/2+(Math.random()-.5)*w*.6,
+        y:h*.8+Math.random()*h*.25,
+        vx:(Math.random()-.5)*1.2,
+        vy:-(1.5+Math.random()*3.5),
+        life:Math.random(),
+        r:6+Math.random()*18,
+        op:.55+Math.random()*.4,
+        hot:Math.random()>.4
+      }));
+    }
+    const bg=ctx.createLinearGradient(0,0,0,h);
+    bg.addColorStop(0,'#050108');bg.addColorStop(.5,'#150608');bg.addColorStop(1,'#220a02');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    // Base glow pool at bottom
+    const glow=ctx.createRadialGradient(w/2,h*.9,0,w/2,h*.9,w*.65);
+    glow.addColorStop(0,'rgba(255,120,20,.5)');glow.addColorStop(.3,'rgba(200,60,10,.25)');glow.addColorStop(.7,'rgba(120,20,5,.1)');glow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+    // Secondary mid glow
+    const mg=ctx.createRadialGradient(w/2,h*.6,0,w/2,h*.6,w*.4);
+    mg.addColorStop(0,'rgba(240,80,10,.15)');mg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=mg;ctx.fillRect(0,0,w,h);
+    this._ps.forEach(p=>{
+      p.life+=.006;
+      p.x+=p.vx+Math.sin(p.life*5+p.x*.003)*1.2;
+      p.y+=p.vy*(1+p.life*.5);
+      if(p.life>=1){
+        p.life=0;p.x=w/2+(Math.random()-.5)*w*.6;p.y=h*.8+Math.random()*h*.2;
+        p.vx=(Math.random()-.5)*1.2;p.vy=-(1.5+Math.random()*3.5);p.hot=Math.random()>.4;
+      }
+      const fade=p.life<.12?p.life/.12:p.life>.55?(1-p.life)/.45:1;
+      const radius=p.r*(1+p.life*1.2);
+      let col;
+      if(p.hot&&p.life<.25) col=`rgba(255,248,200,${p.op*fade*.9})`;
+      else if(p.life<.4)    col=`rgba(255,160,20,${p.op*fade*.75})`;
+      else                   col=`rgba(${Math.round(200-p.life*180)},${Math.round(50-p.life*40)},5,${p.op*fade*.4})`;
+      const pg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius);
+      pg.addColorStop(0,col);pg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=pg;ctx.beginPath();ctx.arc(p.x,p.y,radius,0,Math.PI*2);ctx.fill();
+    });
+  }},
+  smoke:{name:'Incense Smoke',animate:true,draw(ctx,w,h){
+    // Re-init particles whenever canvas size changes
+    if(!this._ps||this._pw!==w||this._ph!==h){
+      this._pw=w;this._ph=h;
+      // Spawn from lower-centre but spread wide and rise far
+      this._ps=Array.from({length:90},(_,i)=>({
+        x:w/2+(Math.random()-.5)*w*.2,
+        y:h*.75+Math.random()*h*.2,
+        vx:(Math.random()-.5)*.5,
+        vy:-(0.5+Math.random()*0.9),
+        life:Math.random(),
+        r:18+Math.random()*35,   // much larger puffs
+        op:.22+Math.random()*.28,
+        drift:(Math.random()-.5)*60
+      }));
+    }
+    const bg=ctx.createLinearGradient(0,0,0,h);
+    bg.addColorStop(0,'#060408');bg.addColorStop(.5,'#100c0a');bg.addColorStop(1,'#1c1008');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+    // Warm ember glow at base
+    const gw=ctx.createRadialGradient(w/2,h,0,w/2,h,w*.45);
+    gw.addColorStop(0,'rgba(220,120,40,.4)');gw.addColorStop(.4,'rgba(160,70,20,.15)');gw.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=gw;ctx.fillRect(0,0,w,h);
+    this._ps.forEach(p=>{
+      p.life+=.003; // slower — longer-lived puffs
+      // Wide sinusoidal drift — smoke spreads across whole screen
+      p.x+=p.vx+Math.sin(p.life*2.8+p.drift)*0.9;
+      p.y+=p.vy*(1-p.life*.2);
+      if(p.life>=1){
+        p.life=0;
+        p.x=w/2+(Math.random()-.5)*w*.2;
+        p.y=h*.75+Math.random()*h*.2;
+        p.vx=(Math.random()-.5)*.5;
+        p.vy=-(0.5+Math.random()*0.9);
+        p.drift=(Math.random()-.5)*60;
+      }
+      const fade=p.life<.06?p.life/.06:p.life>.45?(1-p.life)/.55:1;
+      const radius=p.r*(1+p.life*2.5); // puffs expand a lot as they rise
+      const col=p.life<.18
+        ?`rgba(230,150,60,${p.op*fade*.6})`
+        :`rgba(${Math.round(168-p.life*40)},${Math.round(160-p.life*40)},${Math.round(158-p.life*40)},${p.op*fade*.28})`;
+      const pg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,radius);
+      pg.addColorStop(0,col);pg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=pg;ctx.beginPath();ctx.arc(p.x,p.y,radius,0,Math.PI*2);ctx.fill();
+    });
+  }},
+};
+
+function applyBd(){
+  stopBd();
+  const c=document.getElementById('bdc');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  if(ST.customBd){
+    const img=new Image();img.onload=()=>{c.getContext('2d').drawImage(img,0,0,c.width,c.height);};img.src=ST.customBd;return;
+  }
+  const bd=BDS[ST.backdrop];if(!bd)return;
+  const ctx=c.getContext('2d');
+  if(bd.animate){let last=0;const loop=(ts)=>{if(ts-last>30){last=ts;ctx.clearRect(0,0,c.width,c.height);bd.draw(ctx,c.width,c.height);}bdFrame=requestAnimationFrame(loop);};bdFrame=requestAnimationFrame(loop);}
+  else bd.draw(ctx,c.width,c.height);
+}
+function uploadBd(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{ST.customBd=ev.target.result;applyBd();svSt();document.querySelectorAll('.btile').forEach(t=>t.classList.remove('on'));};r.readAsDataURL(f);e.target.value='';}
+
+// ════════════════════════════════════════════
+//  STARS / PARTICLES
+// ════════════════════════════════════════════
+function initStars(){const sf=document.getElementById('sf');if(sf.children.length)return;for(let i=0;i<170;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2.2+.4;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${Math.random()*4+2}s;--dl:${Math.random()*7}s;--lo:${.04+Math.random()*.18};--hi:${.4+Math.random()*.58};`;sf.appendChild(s);}}
+function togStars(){ST.starsOn=!ST.starsOn;initStars();document.getElementById('sf').classList.toggle('on',ST.starsOn);document.getElementById('star-tog').textContent=ST.starsOn?'On ✦':'Off';svSt();}
+function initParticles(){const pc=document.getElementById('ptcl');for(let i=0;i<20;i++){const p=document.createElement('div');p.className='mote';const sz=Math.random()*3+1;p.style.cssText=`width:${sz}px;height:${sz}px;left:${15+Math.random()*70}%;top:${25+Math.random()*55}%;--d:${6+Math.random()*9}s;--dl:${Math.random()*12}s;--op:${.12+Math.random()*.22};--tx:${(Math.random()-.5)*45}px;`;pc.appendChild(p);}}
+
+// ════════════════════════════════════════════
+//  ICON RENDERER
+// ════════════════════════════════════════════
+function renderIcon(obj){
+  if(!obj)return'';
+  if(obj.render===INC)return`<div class="incwrap" style="height:44px;display:flex;align-items:flex-end"><div class="sm1"></div><div class="sm2"></div><svg viewBox="0 0 44 44" width="44" height="44"><line x1="22" y1="40" x2="22" y2="8" stroke="#7a5020" stroke-width="2.8" stroke-linecap="round"/><circle cx="22" cy="8" r="3" fill="#e0b84a" opacity=".8"/><line x1="14" y1="40" x2="30" y2="40" stroke="#5a3010" stroke-width="2"/></svg></div>`;
+  if(typeof obj.render==='string'&&obj.render.startsWith('__C__')){const col=obj.render.replace('__C__','');return`<div class="cw"><div class="fl"></div><svg viewBox="0 0 22 38" width="22" height="38"><rect x="5" y="1" width="12" height="33" rx="2" fill="${col}" stroke="rgba(0,0,0,.22)" stroke-width=".6"/><rect x="7" y="3" width="4.5" height="29" rx="1" fill="rgba(255,255,255,.12)"/></svg></div>`;}
+  if(obj.type==='custom'||obj.cat==='custom')return`<img src="${obj.src}" style="width:44px;height:44px;object-fit:cover;border-radius:8px;">`;
+  return obj.render||'';
+}
+
+// ════════════════════════════════════════════
+//  OBJECT GRID
+// ════════════════════════════════════════════
+let curCat='all',pendId=null;
+function allObjs(){return[...OBJS,...(ST.customObjs||[]).map(c=>({...c,cat:'custom'}))];}
+function renderCats(){document.getElementById('cats').innerHTML=CATS_DEF.map(c=>`<div class="cpill${c.id===curCat?' on':''}" onclick="setCat('${c.id}',this)">${c.label}</div>`).join('');}
+function setCat(id,el){curCat=id;document.querySelectorAll('.cpill').forEach(p=>p.classList.remove('on'));el.classList.add('on');renderGrid();}
+function renderGrid(){
+  const objs=allObjs().filter(o=>curCat==='all'||o.cat===curCat);
+  document.getElementById('ogrid').innerHTML=objs.map(o=>`<div class="otile" id="ot-${o.id}" draggable="true" ondragstart="ds(event,'${o.id}')" onclick="tc('${o.id}')"><div class="oico">${renderIcon(o)}</div><div class="onam">${o.name.length>12?o.name.slice(0,12)+'…':o.name}</div></div>`).join('');
+}
+function ds(e,id){pendId=id;e.dataTransfer.effectAllowed='copy';}
+function tc(id){
+  // Open the zone picker modal for tap-to-place
+  pendId=id;
+  const obj=allObjs().find(o=>o.id===id);
+  document.getElementById('zp-title').textContent='Place ' + (obj?obj.name:'object') + ' where?';
+  openM('zone-pick');
+}
+function zpPlace(zone){
+  if(pendId){place(pendId,zone);pendId=null;}
+  closeM('zone-pick');
+}
+
+// ════════════════════════════════════════════
+//  DRAG & DROP
+// ════════════════════════════════════════════
+function dzo(e){e.preventDefault();e.currentTarget.classList.add('dov');}
+function dzl(e){e.currentTarget.classList.remove('dov');}
+function dzd(e,z){e.preventDefault();e.currentTarget.classList.remove('dov');if(pendId){place(pendId,z);pendId=null;}}
+function dzc(z){if(pendId){place(pendId,z);pendId=null;}}
+
+// ════════════════════════════════════════════
+//  PLACE / ZONES
+// ════════════════════════════════════════════
+function place(id,zone){
+  if(!ST.zones[zone])ST.zones[zone]=[];
+  const lim=zone==='C'?6:(zone.length===2?2:3);
+  if(ST.zones[zone].length>=lim)ST.zones[zone].shift();
+  const obj=allObjs().find(o=>o.id===id);
+  ST.zones[zone].push(obj?.type==='custom'||obj?.cat==='custom'?{id,type:'custom',src:obj.src}:{id,type:'object'});
+  renderZones();svSt();ping();
+}
+function renderZones(){
+  ['N','E','S','W'].forEach(d=>renderZone(d,document.getElementById('zo-'+d)));
+  ['NE','SE','SW','NW'].forEach(d=>renderZone(d,document.getElementById('zo-'+d)));
+  renderZone('C',document.getElementById('czo'));
+  document.getElementById('chint').style.display=(ST.zones.C||[]).length?'none':'';
+}
+function renderZone(zone,cont){
+  if(!cont)return;cont.innerHTML='';
+  (ST.zones[zone]||[]).forEach((item,i)=>{
+    const obj=allObjs().find(o=>o.id===item.id);
+    const wrap=document.createElement('div');wrap.className='pi';
+    wrap.style.setProperty('--fd',`${2.5+i*.6}s`);wrap.style.setProperty('--fdl',`${i*.4}s`);
+    if(item.type==='image'||item.type==='custom'){const img=document.createElement('img');img.src=item.src;wrap.appendChild(img);}
+    else if(obj){wrap.innerHTML=renderIcon(obj);}
+    const rm=document.createElement('button');rm.className='rx';rm.textContent='×';
+    rm.onclick=e=>{e.stopPropagation();ST.zones[zone].splice(i,1);renderZones();svSt();};
+    wrap.appendChild(rm);cont.appendChild(wrap);
+  });
+}
+
+// ════════════════════════════════════════════
+//  DIRECTIONS
+// ════════════════════════════════════════════
+function renderDirGrid(){document.getElementById('dgrid').innerHTML=['N','E','S','W'].map(d=>`<div class="dbox"><div class="dblbl">${d}</div><input placeholder="Name" value="${ST.dirs[d]?.name||''}" oninput="updDir('${d}','name',this.value)"><input placeholder="Element" value="${ST.dirs[d]?.element||''}" style="font-size:.85rem;color:var(--text-d)" oninput="updDir('${d}','element',this.value)"></div>`).join('');}
+function updDir(d,f,v){if(!ST.dirs[d])ST.dirs[d]={};ST.dirs[d][f]=v;applyDirs();svSt();}
+function applyDirs(){['N','E','S','W'].forEach(d=>{const c=ST.dirs[d]||{};const ne=document.getElementById('dn-'+d);if(ne)ne.textContent=c.name||d;const ee=document.getElementById('de-'+d);if(ee)ee.textContent=c.element||'';});}
+
+// ════════════════════════════════════════════
+//  MODAL / NAME
+// ════════════════════════════════════════════
+function openM(id){if(id==='name')document.getElementById('ni').value=ST.altarName;document.getElementById('m-'+id).classList.add('open');}
+function closeM(id){document.getElementById('m-'+id).classList.remove('open');}
+function saveN(){const v=document.getElementById('ni').value.trim();if(v){ST.altarName=v;document.getElementById('aname').textContent=`~ ${v} ~`;svSt();}closeM('name');}
+
+// ════════════════════════════════════════════
+//  TOGGLES
+// ════════════════════════════════════════════
+function togLabels(){ST.hideLabels=!ST.hideLabels;document.body.classList.toggle('hide-labels',ST.hideLabels);document.getElementById('lbl-tog').textContent=ST.hideLabels?'Hidden':'Visible';svSt();}
+function togPenta(){ST.pentaOn=!ST.pentaOn;document.getElementById('penta').classList.toggle('hidden',!ST.pentaOn);document.getElementById('penta-tog').textContent=ST.pentaOn?'Visible':'Off';svSt();}
+function togRitual(){
+  ST.ritualMode=!ST.ritualMode;svSt();
+  const fo=document.getElementById('focus-overlay');
+  const tb=document.getElementById('tb');
+  const hdr=document.querySelector('header');
+  const ii=document.querySelector('.intention-bar');
+  const btn=document.getElementById('rit-tog');
+  if(ST.ritualMode){
+    // Move the real altar into the focus overlay — no clone, stays live
+    const altar=document.getElementById('altar');
+    const fc=document.getElementById('focus-circle');
+    fc.appendChild(altar);
+    fo.classList.add('on');
+    document.body.style.overflow='hidden';
+    document.getElementById('focus-timer-display').style.display=timerRunning?'block':'none';
+    btn.textContent='Active ✦';
+    btn.style.color='var(--teal)';
+  } else {
+    // Return altar to its original home
+    const altar=document.getElementById('focus-circle').querySelector('#altar');
+    if(altar)document.getElementById('aa').appendChild(altar);
+    fo.classList.remove('on');
+    document.body.style.overflow='';
+    document.getElementById('focus-timer-display').style.display='none';
+    btn.textContent='Off';
+    btn.style.color='var(--gold)';
+    // Offer to log this ritual to notes
+    setTimeout(offerRitualNote, 400);
+  }
+}
+function clearAltar(){if(!confirm('Release all objects from the altar?'))return;ST.zones={N:[],E:[],S:[],W:[],NE:[],SE:[],SW:[],NW:[],C:[]};renderZones();svSt();}
+function saveInt(){ST.intention=document.getElementById('ii').value;svSt();}
+
+// ════════════════════════════════════════════
+//  TABS
+// ════════════════════════════════════════════
+function swTab(n,btn){document.querySelectorAll('.tpanel').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));document.getElementById('tp-'+n).classList.add('on');if(btn)btn.classList.add('on');}
+
+// ════════════════════════════════════════════
+//  BACKDROP GRID
+// ════════════════════════════════════════════
+function renderBdGrid(){
+  document.getElementById('bgrd').innerHTML=Object.entries(BDS).map(([k,b])=>`<div class="btile${ST.backdrop===k&&!ST.customBd?' on':''}" onclick="setBd('${k}',this)"><canvas id="bdc-${k}"></canvas><div class="bname">${b.name}</div></div>`).join('');
+  setTimeout(()=>{Object.entries(BDS).forEach(([k,b])=>{const c=document.getElementById('bdc-'+k);if(c){c.width=c.offsetWidth||60;c.height=c.offsetHeight||60;b.draw(c.getContext('2d'),c.width,c.height);}});},80);
+}
+function setBd(k,el){ST.backdrop=k;ST.customBd=null;applyBd();document.querySelectorAll('.btile').forEach(t=>t.classList.remove('on'));el.classList.add('on');svSt();}
+
+// ════════════════════════════════════════════
+//  UPLOAD ITEMS
+// ════════════════════════════════════════════
+let upZone='N';
+function pickZ(z,el){upZone=z;document.querySelectorAll('.zpill').forEach(p=>p.classList.remove('on'));el.classList.add('on');}
+function handleUp(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=ev=>{
+    const src=ev.target.result;const toLib=confirm('Add to Custom library (reuse later)?\nOK = yes   Cancel = place once');
+    const cid='c'+Date.now();const name=file.name.replace(/\.[^.]+$/,'').slice(0,14);
+    if(toLib){if(!ST.customObjs)ST.customObjs=[];ST.customObjs.push({id:cid,name,type:'custom',src});}
+    if(!ST.zones[upZone])ST.zones[upZone]=[];
+    const lim=upZone==='C'?6:(upZone.length===2?2:3);
+    if(ST.zones[upZone].length>=lim)ST.zones[upZone].shift();
+    ST.zones[upZone].push({id:cid,type:'custom',src});
+    renderZones();renderGrid();svSt();ping();
+  };reader.readAsDataURL(file);e.target.value='';
+}
+
+// ════════════════════════════════════════════
+//  SOUNDS
+// ════════════════════════════════════════════
+const SNDS=[{id:'fire',label:'Fire',icon:'🔥'},{id:'bowl',label:'Singing Bowl',icon:'🔔'},{id:'chimes',label:'Wind Chimes',icon:'🎐'},{id:'drone',label:'Deep Drone',icon:'🌀'},{id:'rain',label:'Rain',icon:'🌧️'},{id:'wind',label:'Wind',icon:'💨'},{id:'ocean',label:'Ocean',icon:'🌊'}];
+let actx=null,activeSnd={};
+function getAC(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();return actx;}
+function mkSnd(type){
+  const ctx=getAC();const mg=ctx.createGain();mg.gain.setValueAtTime(.001,ctx.currentTime);mg.gain.linearRampToValueAtTime(.18,ctx.currentTime+1.5);mg.connect(ctx.destination);const nodes=[mg];
+  if(type==='fire'){
+    // Generate pink noise buffer (2 seconds, loop) — avoids deprecated ScriptProcessor
+    const bufLen=ctx.sampleRate*2, buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for(let i=0;i<bufLen;i++){
+      const w=Math.random()*2-1;
+      b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*b2+w*.153852;
+      b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.016898;
+      d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926;
+    }
+    const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;
+    const f=ctx.createBiquadFilter();f.type='bandpass';f.frequency.value=350;f.Q.value=.5;
+    src.connect(f);f.connect(mg);src.start();nodes.push(src,f);
+  }
+  else if(type==='bowl'){
+    let cancelled=false;
+    const playBowl=()=>{
+      if(cancelled)return;
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.frequency.value=432+Math.random()*4;
+      o.type='sine';
+      g.gain.setValueAtTime(0,ctx.currentTime);
+      g.gain.linearRampToValueAtTime(.3,ctx.currentTime+.4);
+      g.gain.linearRampToValueAtTime(0,ctx.currentTime+5);
+      o.connect(g);g.connect(mg);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime+5.5);
+      nodes.push(o,g);
+      const delay=4000+Math.random()*3000;
+      setTimeout(playBowl,delay);
+    };
+    playBowl();
+    const origStop=null;
+    nodes._cancel=()=>{cancelled=true;};
+  }
+  else if(type==='chimes'){
+    let cancelled=false;
+    // Pentatonic scale, two octaves — use two oscillators per note (fundamental + 2nd harmonic)
+    // for a richer, more metallic chime tone. Long exponential decay like a real chime tube.
+    const scale=[261,294,330,392,440,523,587,659,784,880];
+    const playChime=()=>{
+      if(cancelled)return;
+      const freq=scale[Math.floor(Math.random()*scale.length)];
+      const now=ctx.currentTime;
+      // Fundamental
+      const o1=ctx.createOscillator(),g1=ctx.createGain();
+      o1.frequency.value=freq; o1.type='sine';
+      g1.gain.setValueAtTime(0,now);
+      g1.gain.linearRampToValueAtTime(.28,now+.008);
+      g1.gain.exponentialRampToValueAtTime(.001,now+4.5);
+      o1.connect(g1);g1.connect(mg);
+      // Inharmonic partial (slightly detuned 2nd partial — gives metallic quality)
+      const o2=ctx.createOscillator(),g2=ctx.createGain();
+      o2.frequency.value=freq*2.756; o2.type='sine';
+      g2.gain.setValueAtTime(0,now);
+      g2.gain.linearRampToValueAtTime(.10,now+.008);
+      g2.gain.exponentialRampToValueAtTime(.001,now+2.5);
+      o2.connect(g2);g2.connect(mg);
+      o1.start(now);o2.start(now);
+      o1.stop(now+5);o2.stop(now+3);
+      nodes.push(o1,g1,o2,g2);
+      setTimeout(playChime,2000+Math.random()*4000);
+    };
+    playChime();
+    nodes._cancel=()=>{cancelled=true;};
+  }
+  else if(type==='drone'){[55,110,220].forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=f;o.type=i===0?'sawtooth':'sine';g.gain.value=i===0?.05:.02;const lf=ctx.createOscillator(),lg=ctx.createGain();lf.frequency.value=.08+i*.03;lg.gain.value=f*.008;lf.connect(lg);lg.connect(o.frequency);o.connect(g);g.connect(mg);lf.start();o.start();nodes.push(o,lf);});}
+  else{
+    // White noise buffer for rain/wind/ocean — avoids deprecated ScriptProcessor
+    const bufLen=ctx.sampleRate*3, buf=ctx.createBuffer(1,bufLen,ctx.sampleRate);
+    const d=buf.getChannelData(0);
+    for(let i=0;i<bufLen;i++) d[i]=(Math.random()*2-1)*.04;
+    const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;
+    const f=ctx.createBiquadFilter();
+    f.type=type==='rain'?'bandpass':'lowpass';
+    f.frequency.value=type==='rain'?2000:type==='ocean'?300:500;
+    f.Q.value=type==='rain'?1.5:.8;
+    src.connect(f);f.connect(mg);src.start();nodes.push(src,f);
+  }
+  return{nodes,stop:()=>{if(nodes._cancel)nodes._cancel();mg.gain.linearRampToValueAtTime(0,ctx.currentTime+1);setTimeout(()=>nodes.forEach(n=>{try{n.disconnect&&n.disconnect();}catch(e){}}),1200);}};
+}
+function renderSounds(){document.getElementById('sgrid').innerHTML=SNDS.map(s=>`<div class="stile" id="st-${s.id}" onclick="togSnd('${s.id}')"><span class="si">${s.icon}</span><span class="sn">${s.label}</span></div>`).join('');}
+function togSnd(id){if(actx?.state==='suspended')actx.resume();const t=document.getElementById('st-'+id);if(activeSnd[id]){activeSnd[id].stop();delete activeSnd[id];t?.classList.remove('on');}else{activeSnd[id]=mkSnd(id);activeSnd[id].active=true;t?.classList.add('on');}}
+function ping(){try{const ctx=getAC();if(ctx.state==='suspended')return;const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=432;o.type='sine';g.gain.setValueAtTime(.05,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.4);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+.4);}catch(e){}}
+
+// ════════════════════════════════════════════
+//  MOON / INIT
+// ════════════════════════════════════════════
+function moonPhase(){const k=new Date('2000-01-06').getTime(),cy=29.53*24*3600*1e3,p=((Date.now()-k)%cy)/cy;return['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'][Math.floor(p*8)];}
+
+
+// ════════════════════════════════════════════
+//  FOCUS / IMMERSIVE MODE
+// ════════════════════════════════════════════
+
+
+
+// ════════════════════════════════════════════
+//  RITUAL TIMER
+// ════════════════════════════════════════════
+let timerInterval=null,timerRunning=false,timerSecs=0;
+function setTimer(){
+  const mins=parseInt(document.getElementById('timer-sel').value);
+  clearInterval(timerInterval);timerRunning=false;
+  if(!mins){document.getElementById('timer-status').textContent='--:--';return;}
+  timerSecs=mins*60;timerRunning=true;
+  updateTimerDisplay();
+  timerInterval=setInterval(()=>{
+    timerSecs--;
+    updateTimerDisplay();
+    if(timerSecs<=0){
+      clearInterval(timerInterval);timerRunning=false;
+      document.getElementById('timer-status').textContent='Done ✦';
+      // Ring the bowl 3 times
+      ping();setTimeout(ping,1500);setTimeout(ping,3000);
+    }
+  },1000);
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerSecs/60),s=timerSecs%60;
+  const str=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timer-status').textContent=str;
+  const fd=document.getElementById('focus-timer-display');
+  if(fd)fd.textContent=str;
+}
+
+// ════════════════════════════════════════════
+//  LUNAR CALENDAR & PLANETARY HOURS
+// ════════════════════════════════════════════
+function renderLunar(){
+  const now=new Date();
+  // Moon phase (accurate Meeus formula approximation)
+  const k=new Date('2000-01-06').getTime(),cy=29.53058867*24*3600*1e3;
+  const p=((Date.now()-k)%cy)/cy;
+  const phases=['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+  const phaseNames=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+  const pi=Math.floor(p*8)%8;
+  // Days to next new and full moon
+  const daysInCycle=p*29.53;
+  const toFull=p<0.5?Math.round((0.5-p)*29.53):Math.round((1.5-p)*29.53);
+  const toNew=Math.round((1-p)*29.53);
+  const nextFull=new Date(now.getTime()+toFull*86400000);
+  const nextNew=new Date(now.getTime()+toNew*86400000);
+  const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+  document.getElementById('lunar-panel').innerHTML=`
+    <div class="lunar-row"><span class="lunar-label">Current Phase</span><span class="lunar-val">${phases[pi]} ${phaseNames[pi]}</span></div>
+    <div class="lunar-row"><span class="lunar-label">Next Full Moon</span><span class="lunar-val">${fmt(nextFull)} (${toFull}d)</span></div>
+    <div class="lunar-row"><span class="lunar-label">Next New Moon</span><span class="lunar-val">${fmt(nextNew)} (${toNew}d)</span></div>
+  `;
+  // Planetary hours — day and night ruled by planets in Chaldean order
+  const planets=['Saturn','Sun','Moon','Mars','Mercury','Jupiter','Venus'];
+  const pSymbols=['♄','☉','☽','♂','☿','♃','♀'];
+  const dayOfWeek=now.getDay(); // 0=Sun
+  // Chaldean day rulers: Sun=0,Moon=1,Mars=2,Merc=3,Jup=4,Ven=5,Sat=6
+  const dayRulers=[1,6,3,4,2,5,0]; // Sun,Mon,Tue,Wed,Thu,Fri,Sat -> planet index
+  const ruler=dayRulers[dayOfWeek];
+  const hour=now.getHours();
+  const isDaytime=hour>=6&&hour<18;
+  const hourOfPeriod=isDaytime?hour-6:hour<6?hour+6:hour-18;
+  const planetHourIdx=(ruler+hourOfPeriod)%7;
+  document.getElementById('planet-hour').innerHTML=`
+    <div class="ph-big">${pSymbols[planetHourIdx]}</div>
+    <div class="ph-sub">Hour of ${planets[planetHourIdx]}</div>
+    <div class="ph-sub" style="margin-top:2px;opacity:.5">Day of ${planets[ruler]}</div>
+  `;
+}
+
+// ════════════════════════════════════════════
+//  SABBAT PRESETS
+// ════════════════════════════════════════════
+const SABBATS={
+  // Samhain — death, ancestors, thinning veil. Black void, black/orange candles, cauldron centre
+  samhain:{name:'Samhain',backdrop:'void',sound:'drone',
+    objs:{N:['cbl'],E:['cbl'],S:['co'],W:['cauldron'],
+          NE:['co'],NW:['co'],SE:['cbl'],SW:['cbl'],
+          C:['cauldron','tripm']}},
+  // Yule — rebirth of sun, longest night. Dark velvet, gold/red candles, sun centre
+  yule:{name:'Yule',backdrop:'void',sound:'drone',
+    objs:{N:['cw'],E:['cw'],S:['cr'],W:['cw'],
+          NE:['cgo'],NW:['cgo'],SE:['cr'],SW:['cr'],
+          C:['sun','pentacle']}},
+  // Imbolc — first light, Brigid. Slate stone, white/yellow candles, fire centre
+  imbolc:{name:'Imbolc',backdrop:'slate',sound:'fire',
+    objs:{N:['cw'],E:['cgo'],S:['cw'],W:['cw'],
+          NE:['cw'],NW:['cw'],SE:['cgo'],SW:['cgo'],
+          C:['e-fire','tripm']}},
+  // Ostara — spring equinox. Daytime clouds, yellow/green/pink, pentacle centre
+  ostara:{name:'Ostara',backdrop:'clouds',sound:'chimes',
+    objs:{N:['cg'],E:['cgo'],S:['cpk'],W:['cg'],
+          NE:['cpk'],NW:['cg'],SE:['cgo'],SW:['cpk'],
+          C:['pentacle','e-air']}},
+  // Beltane — fire festival, union. Fire backdrop, red/green, horned god centre
+  beltane:{name:'Beltane',backdrop:'fire',sound:'fire',
+    objs:{N:['cg'],E:['cr'],S:['cr'],W:['cg'],
+          NE:['cr'],NW:['cg'],SE:['cr'],SW:['cg'],
+          C:['hornedGod','e-fire']}},
+  // Litha — midsummer, height of sun. Clouds, gold/yellow, sun centre
+  litha:{name:'Litha',backdrop:'clouds',sound:'bowl',
+    objs:{N:['cgo'],E:['cgo'],S:['cgo'],W:['cgo'],
+          NE:['cgo'],NW:['cgo'],SE:['cgo'],SW:['cgo'],
+          C:['sun','e-fire']}},
+  // Lughnasadh — first harvest. Forest, orange/gold/brown, earth centre
+  lughnasadh:{name:'Lughnasadh',backdrop:'forest',sound:'rain',
+    objs:{N:['cg'],E:['co'],S:['co'],W:['cg'],
+          NE:['cgo'],NW:['cg'],SE:['co'],SW:['cgo'],
+          C:['e-earth','cauldron']}},
+  // Mabon — autumn equinox, balance. Forest, orange/purple, chalice centre
+  mabon:{name:'Mabon',backdrop:'forest',sound:'wind',
+    objs:{N:['co'],E:['cp'],S:['co'],W:['cg'],
+          NE:['cp'],NW:['cg'],SE:['co'],SW:['cp'],
+          C:['e-earth','chalice']}},
+};
+function loadSabbat(key){
+  const s=SABBATS[key];if(!s)return;
+  if(!confirm(`Load ${s.name} preset? This will replace current altar.`))return;
+  // Stop existing sounds
+  Object.keys(activeSnd).forEach(id=>{activeSnd[id].stop();delete activeSnd[id];});
+  document.querySelectorAll('.stile').forEach(t=>t.classList.remove('on'));
+  ST.zones={N:[],E:[],S:[],W:[],NE:[],SE:[],SW:[],NW:[],C:[]};
+  Object.entries(s.objs).forEach(([zone,ids])=>{
+    ids.forEach(id=>{
+      const obj=allObjs().find(o=>o.id===id);
+      if(obj)ST.zones[zone].push({id,type:'object'});
+    });
+  });
+  ST.backdrop=s.backdrop;ST.customBd=null;applyBd();
+  document.querySelectorAll('.btile').forEach(t=>t.classList.remove('on'));
+  // Start soundscape
+  if(s.sound){
+    setTimeout(()=>{
+      activeSnd[s.sound]=mkSnd(s.sound);
+      const btn=document.getElementById('st-'+s.sound);
+      if(btn)btn.classList.add('on');
+    },800);
+  }
+  renderZones();svSt();ping();
+  closeM('settings');
+}
+
+// ════════════════════════════════════════════
+//  GRIMOIRE
+// ════════════════════════════════════════════
+function saveNotes(){
+  ST.notes=document.getElementById('grimoire-area').value;
+  svSt();
+}
+function saveGrimoire(){saveNotes();} // alias for HTML compatibility
+
+// ════════════════════════════════════════════
+//  CANDLE COLOUR CORRESPONDENCES
+// ════════════════════════════════════════════
+const CANDLE_TIPS={
+  '#f5f0e8':'White — purity, truth, new beginnings, the full moon',
+  '#1a0e10':'Black — banishing, protection, absorbing negativity',
+  '#cc3030':'Red — passion, courage, vitality, Mars energy',
+  '#2a6030':'Green — abundance, growth, healing, earth magic',
+  '#7030a0':'Purple — psychic power, wisdom, spiritual connection',
+  '#2040a0':'Blue — calm, healing, communication, water',
+  '#f0c040':'Yellow — clarity, intellect, air, Mercury',
+  '#d05010':'Orange — success, creativity, joy, attraction',
+  '#e8e0d8':'Silver — lunar magic, the Goddess, intuition',
+};
+function showTip(msg,dur=3000){
+  const t=document.getElementById('candle-tip');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(showTip._t);showTip._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+
+// ════════════════════════════════════════════
+//  RITUAL NOTES AUTO-LOG
+// ════════════════════════════════════════════
+function offerRitualNote(){
+  if(!confirm('Add a record of this ritual to your notes?'))return;
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  // Moon phase
+  const k=new Date('2000-01-06').getTime(),cy=29.53058867*24*3600*1e3,p=((Date.now()-k)%cy)/cy;
+  const phaseNames=['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent'];
+  const phase=phaseNames[Math.floor(p*8)%8];
+  // Intention
+  const intention=ST.intention||'(none set)';
+  // Altar contents
+  const zoneLabels={N:'North',E:'East',S:'South',W:'West',NE:'North-East',SE:'South-East',SW:'South-West',NW:'North-West',C:'Centre'};
+  const altarLines=Object.entries(ST.zones).filter(([z,items])=>items&&items.length).map(([z,items])=>{
+    const names=items.map(item=>{const o=allObjs().find(o=>o.id===item.id);return o?o.name:item.id;}).join(', ');
+    return `  ${zoneLabels[z]||z}: ${names}`;
+  }).join('\n');
+  const entry=`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${dateStr} at ${timeStr}\nMoon: ${phase}\nIntention: ${intention}\nAltar:\n${altarLines||'  (empty)'}\n`;
+  const el=document.getElementById('grimoire-area');
+  if(el){el.value=(el.value+entry).trim();ST.notes=el.value;svSt();}
+}
+
+// ── Patch place() to show candle tips and log tarot ──
+const _origPlace=place;
+place=function(id,zone){
+  _origPlace(id,zone);
+  const obj=allObjs().find(o=>o.id===id);
+  if(obj){
+    if(typeof obj.render==='string'&&obj.render.startsWith('__C__')){
+      const col=obj.render.replace('__C__','');
+      if(CANDLE_TIPS[col])showTip(CANDLE_TIPS[col],5000);
+    }
+    
+  }
+};
+
+// ── Patch openM to load settings panel data ──
+const _origOpenM=openM;
+openM=function(id){
+  _origOpenM(id);
+  if(id==='settings'){renderLunar();setInterval(renderLunar,60000);}
+  
+};
+
+
+ldSt();applyBd();initParticles();initStars();
+renderCats();renderGrid();renderSounds();renderDirGrid();renderBdGrid();
+renderZones();applyDirs();
+document.getElementById('aname').textContent=`~ ${ST.altarName} ~`;
+document.getElementById('moon').textContent=moonPhase();
+document.getElementById('ii').value=ST.intention||'';
+const ga=document.getElementById('grimoire-area');if(ga)ga.value=ST.notes||'';
+if(ST.starsOn){document.getElementById('sf').classList.add('on');document.getElementById('star-tog').textContent='On ✦';}
+if(ST.ritualMode){ST.ritualMode=false;togRitual();document.getElementById('rit-tog').style.color='var(--teal)';}
+if(ST.hideLabels){document.body.classList.add('hide-labels');document.getElementById('lbl-tog').textContent='Hidden';}
+if(!ST.pentaOn){document.getElementById('penta').classList.add('hidden');}
+else{document.getElementById('penta-tog').textContent='Visible';}
+window.addEventListener('resize',()=>applyBd());
+
+// Touch drag
+let tdId=null,tdEl=null;
+document.addEventListener('touchstart',e=>{
+  const t=e.target.closest('.otile');
+  if(t){tdId=t.id.replace('ot-','');tdEl=t;}
+});
+document.addEventListener('touchmove',e=>{
+  if(tdId)e.preventDefault();
+},{passive:false});
+document.addEventListener('touchend',e=>{
+  if(!tdId)return;
+  const touch=e.changedTouches[0];
+  // Temporarily hide the source tile so elementFromPoint finds the zone beneath
+  if(tdEl)tdEl.style.pointerEvents='none';
+  const el=document.elementFromPoint(touch.clientX,touch.clientY);
+  if(tdEl)tdEl.style.pointerEvents='';
+  const zone=el?.closest('[data-dir]')?.dataset?.dir
+    ||(el?.closest('#cz')?'C':null)
+    ||(el?.closest('#dz-N,#dz-E,#dz-S,#dz-W')?.dataset?.dir||null);
+  if(zone){place(tdId,zone);}
+  tdId=null;tdEl=null;
+});
+</script>
+</body>
+</html>
