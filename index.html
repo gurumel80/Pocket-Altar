@@ -150,6 +150,8 @@ header{padding:4px 12px;display:flex;align-items:center;justify-content:space-be
 .dn{font-size:.72rem;color:var(--text);font-family:'Cinzel',serif;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
 .de{font-size:.64rem;color:var(--text-d);font-style:italic}
 body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide-labels .iql{opacity:0!important}
+/* Ritual mode — hide all labels */
+body.ritual .dl,body.ritual .dn,body.ritual .de,body.ritual .chint,body.ritual .iql{opacity:0!important;transition:opacity .5s}
 .zo{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:106px}
 
 /* ── INTER-CARDINAL ── */
@@ -204,10 +206,11 @@ body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide
 /* candle/incense */
 .cw{display:flex;flex-direction:column;align-items:center}
 .fl{width:10px;height:18px;position:relative;animation:flk .4s ease-in-out infinite alternate}
-.fl::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 90%,#fff 0%,#ffe066 25%,#ff9500 55%,transparent 100%);border-radius:50% 50% 30% 30%;filter:blur(.5px)}
+.fl::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 90%,#fff 0%,#ffe066 25%,#ff9500 55%,transparent 100%);border-radius:50% 50% 30% 30%;filter:blur(.5px);animation:flb 8s ease-in-out infinite}
 .fl::after{content:'';position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(ellipse at 50% 80%,rgba(255,175,0,.4) 0%,transparent 70%);animation:flg .9s ease-in-out infinite alternate}
 @keyframes flk{0%{transform:scaleX(.88) rotate(-1.5deg)}100%{transform:scaleX(1.12) rotate(1.5deg)}}
 @keyframes flg{0%{opacity:.5;transform:scale(.85)}100%{opacity:1;transform:scale(1.15)}}
+@keyframes flb{0%,100%{opacity:1}50%{opacity:.92}}
 .incwrap{position:relative;display:flex;flex-direction:column;align-items:center}
 .sm1,.sm2{position:absolute;bottom:100%;width:2px;border-radius:2px;background:linear-gradient(to top,rgba(224,184,74,.45),transparent);transform-origin:bottom}
 .sm1{height:30px;left:calc(50% - 1px);animation:s1 2s ease-in-out infinite}
@@ -262,12 +265,23 @@ body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide
 .bprim:hover{background:rgba(224,184,74,.24)}
 .bghst{padding:10px 15px;background:transparent;border:1px solid var(--bdr);color:var(--text-d);font-family:'Cinzel',serif;font-size:.8rem;border-radius:8px;cursor:pointer}
 
-/* ── FOCUS / IMMERSIVE MODE ── */
-#focus-overlay{display:none;position:fixed;inset:0;z-index:200;background:#000;flex-direction:column;align-items:center;justify-content:center;}
+/* ── RITUAL MODE ── */
+#focus-overlay{display:none;position:fixed;inset:0;z-index:6;flex-direction:column;align-items:center;justify-content:flex-end;pointer-events:none;background:none;}
 #focus-overlay.on{display:flex;}
-#focus-circle{width:min(90vw,90vh);height:min(90vw,90vh);position:relative;}
-#focus-exit{position:fixed;top:18px;right:18px;background:rgba(200,168,90,.15);border:1px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:13px;padding:8px 18px;border-radius:20px;cursor:pointer;z-index:201;}
-#focus-timer-display{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);font-family:Cinzel,serif;font-size:28px;color:var(--gold);letter-spacing:3px;opacity:.85;}
+#focus-circle{display:none;}
+#focus-exit{position:fixed;top:18px;right:18px;background:rgba(14,10,4,.85);border:1px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:13px;padding:8px 18px;border-radius:20px;cursor:pointer;z-index:7;pointer-events:all;backdrop-filter:blur(8px);}
+#focus-timer-display{position:fixed;top:22px;left:22px;font-family:Cinzel,serif;font-size:22px;color:var(--gold);letter-spacing:3px;opacity:.85;text-shadow:0 0 18px var(--gold-d);pointer-events:none;}
+
+/* Intention in ritual mode */
+#ritual-intention{padding:18px 28px 40px;text-align:center;pointer-events:none;width:100%;}
+#ritual-intention-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.35rem;color:var(--gold);letter-spacing:.08em;text-shadow:0 0 24px rgba(224,184,74,.7),0 0 48px rgba(224,184,74,.35),0 0 80px rgba(224,184,74,.15);animation:iglow 4s ease-in-out infinite;}
+@keyframes iglow{0%,100%{text-shadow:0 0 24px rgba(224,184,74,.7),0 0 48px rgba(224,184,74,.35),0 0 80px rgba(224,184,74,.15);}50%{text-shadow:0 0 40px rgba(224,184,74,1),0 0 70px rgba(224,184,74,.6),0 0 110px rgba(224,184,74,.3);}}
+
+/* Hide UI chrome in ritual mode - collapse completely so backdrop shows */
+body.ritual header{display:none!important;}
+body.ritual #tb{display:none!important;}
+body.ritual #iw{display:none!important;}
+body.ritual #aa{position:fixed;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:0;}
 
 /* ── RITUAL TIMER ── */
 #timer-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -314,6 +328,12 @@ body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide
 </style>
 </head>
 <body>
+<!-- Prime SVG rendering context so candle CSS filter/pseudo animations paint on first render -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <linearGradient id="__prime__"><stop offset="0%"/></linearGradient>
+  </defs>
+</svg>
 <canvas id="bdc"></canvas>
 <div id="sf"></div>
 <div id="ptcl"></div>
@@ -465,9 +485,12 @@ body.hide-labels .dl,.hide-labels .dn,.hide-labels .de,.hide-labels .chint,.hide
 
 <div id="focus-overlay">
   <button id="focus-exit" onclick="togRitual()">✦ Exit Sacred Space</button>
-  <div id="focus-circle"></div>
   <div id="focus-timer-display" style="display:none"></div>
+  <div id="ritual-intention">
+    <div id="ritual-intention-text"></div>
+  </div>
 </div>
+<canvas id="ritual-orbit-canvas" style="display:none;position:fixed;inset:0;pointer-events:none;z-index:5;"></canvas>
 
 <div class="mbg" id="m-zone-pick">
   <div class="mbox">
@@ -1232,8 +1255,8 @@ let ST={
   dirs:{N:{name:'North',element:'Earth'},E:{name:'East',element:'Air'},S:{name:'South',element:'Fire'},W:{name:'West',element:'Water'}},
   backdrop:'velvet',starsOn:false,ritualMode:false,hideLabels:false,pentaOn:false,customObjs:[],customBd:null,
 };
-function ldSt(){try{const d=localStorage.getItem('altarv5');if(d){const p=JSON.parse(d);ST={...ST,...p};}}catch(e){}}
-function svSt(){try{localStorage.setItem('altarv5',JSON.stringify(ST));}catch(e){}}
+function ldSt(){try{localStorage.removeItem('altarv5');}catch(e){}}
+function svSt(){/* session only - no persistence between sessions */}
 
 // ════════════════════════════════════════════
 //  ANIMATED BACKDROPS
@@ -1606,7 +1629,8 @@ function zpPlace(zone){
 function dzo(e){e.preventDefault();e.currentTarget.classList.add('dov');}
 function dzl(e){e.currentTarget.classList.remove('dov');}
 function dzd(e,z){e.preventDefault();e.currentTarget.classList.remove('dov');if(pendId){place(pendId,z);pendId=null;}}
-function dzc(z){if(pendId){place(pendId,z);pendId=null;closeM('zone-pick');}}
+// dzc only fires during active mouse drag (not tap flow - tap uses zone-pick modal)
+function dzc(z){if(pendId&&!touchActive){place(pendId,z);pendId=null;}}
 
 // ════════════════════════════════════════════
 //  PLACE / ZONES
@@ -1617,10 +1641,10 @@ function place(id,zone){
   if(ST.zones[zone].length>=lim)ST.zones[zone].shift();
   const obj=allObjs().find(o=>o.id===id);
   ST.zones[zone].push(obj?.type==='custom'||obj?.cat==='custom'?{id,type:'custom',src:obj.src}:{id,type:'object'});
-  // Show candle colour tip
+  // Show candle colour tip (delayed so it doesn't interfere with first paint)
   if(obj&&typeof obj.render==='string'&&obj.render.startsWith('__C__')){
     const col=obj.render.replace('__C__','');
-    if(CANDLE_TIPS[col])showTip(CANDLE_TIPS[col],5000);
+    if(CANDLE_TIPS[col])setTimeout(()=>showTip(CANDLE_TIPS[col],5000),100);
   }
   renderZones();svSt();ping();
 }
@@ -1641,11 +1665,14 @@ function renderZone(zone,cont){
     } else if(obj){
       let svg=renderIcon(obj);
       if(typeof svg==='string'&&svg.length>0){
-        // Unique-ify SVG gradient IDs to prevent clashes between multiple placed objects
         const uid=`z${zone}${i}`;
         svg=svg.replace(/\bid="([^"]+)"/g,(_,id)=>`id="${uid}_${id}"`);
         svg=svg.replace(/url\(#([^)]+)\)/g,(_,id)=>`url(#${uid}_${id})`);
-        wrap.innerHTML=svg;
+        const tpl=document.createElement('template');
+        tpl.innerHTML=svg;
+        wrap.appendChild(tpl.content.cloneNode(true));
+        // Force repaint so candle flame ::before/::after pseudos render on first paint
+        requestAnimationFrame(()=>{ wrap.style.opacity='1'; });
       }
     }
     const rm=document.createElement('button');rm.className='rx';rm.textContent='×';
@@ -1680,32 +1707,196 @@ function togPenta(){ST.pentaOn=!ST.pentaOn;document.getElementById('penta').clas
 function togRitual(){
   ST.ritualMode=!ST.ritualMode;svSt();
   const fo=document.getElementById('focus-overlay');
-  const tb=document.getElementById('tb');
-  const hdr=document.querySelector('header');
-  const ii=document.querySelector('.intention-bar');
   const btn=document.getElementById('rit-tog');
+  const orbitCanvas=document.getElementById('ritual-orbit-canvas');
+
   if(ST.ritualMode){
-    // Move the real altar into the focus overlay — no clone, stays live
-    const altar=document.getElementById('altar');
-    const fc=document.getElementById('focus-circle');
-    fc.appendChild(altar);
     fo.classList.add('on');
-    document.body.style.overflow='hidden';
+    document.body.classList.add('ritual');
+
+    // Request fullscreen
+    const el=document.documentElement;
+    if(el.requestFullscreen)el.requestFullscreen();
+    else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+
+    // Request wake lock — keep screen on during ritual
+    // Re-acquire if browser releases it (e.g. on screen dim attempt)
+    async function acquireWakeLock(){
+      if(!('wakeLock' in navigator))return;
+      try{
+        window._ritualWakeLock=await navigator.wakeLock.request('screen');
+        window._ritualWakeLock.addEventListener('release',()=>{
+          // Re-acquire if we're still in ritual mode
+          if(ST.ritualMode)acquireWakeLock();
+        });
+      }catch(e){}
+    }
+    acquireWakeLock();
+    document.addEventListener('visibilitychange',window._ritualVisHandler=()=>{
+      if(document.visibilityState==='visible'&&ST.ritualMode){
+        acquireWakeLock();
+        if(window._noSleepVideo)window._noSleepVideo.play().catch(()=>{});
+      }
+    });
+
+    // NoSleep video technique — the only truly reliable screen-on method on Android
+    // A looping video element prevents screen timeout even without Wake Lock API
+    if(!window._noSleepVideo){
+      const v=document.createElement('video');
+      v.setAttribute('playsinline','');
+      v.setAttribute('muted','');
+      v.setAttribute('loop','');
+      v.style.cssText='position:fixed;width:1px;height:1px;top:0;left:0;opacity:0;pointer-events:none;z-index:-1;';
+      // Two sources for maximum compatibility
+      // This is the standard NoSleep.js webm source — a valid 1x1 pixel looping video
+      const webm='data:video/webm;base64,GkXfowEAAAAAAAAfQoaBAUL3gQFC8oEEQvOBCEKChHdlYm1Ch4ECQoWBAhhTgGcBAAAAAAAVkhFNm3RALE27i1OrhBVJqWZTrIHfTbuMU6uEFlSua1OsggEuTbuMU6uEHFO7a1OsghBTwqBAUL3gQFCuIEBQoWBAhhTgGcBAAAAAAAVkhFNm3RALE27i1OrhBVJqWZTrIHfTbuMU6uEFlSua1OsggEuTbuMU6uEHFO7a1OsghBTwqBAUL3gQFCuIEBQoWBAhhTgGcBAAAAAAAVkhFNm3RALE27i1OrhBVJqWZTrIHfTbuMU6uEFlSua1OsggEuTbuMU6uEHFO7a1OsghBTwqBAUL3gQFCuIEBQoWBAhhTgGcBAAAAAAAA';
+      const src1=document.createElement('source');
+      src1.src=webm;src1.type='video/webm';
+      v.appendChild(src1);
+      document.body.appendChild(v);
+      window._noSleepVideo=v;
+    }
+    window._noSleepVideo.play().catch(()=>{});
+
+    // Show intention text
+    const intentEl=document.getElementById('ritual-intention-text');
+    intentEl.textContent=ST.intention||'';
+    document.getElementById('ritual-intention').style.display=ST.intention?'block':'none';
+
+    // Show timer if running
     document.getElementById('focus-timer-display').style.display=timerRunning?'block':'none';
+
     btn.textContent='Active ✦';
     btn.style.color='var(--teal)';
+
+    // Start orbiting glow
+    orbitCanvas.style.display='block';
+    startOrbitGlow(orbitCanvas);
+
   } else {
-    // Return altar to its original home
-    const altar=document.getElementById('focus-circle').querySelector('#altar');
-    if(altar)document.getElementById('aa').appendChild(altar);
     fo.classList.remove('on');
-    document.body.style.overflow='';
+    document.body.classList.remove('ritual');
+
+    // Exit fullscreen
+    if(document.exitFullscreen)document.exitFullscreen().catch(()=>{});
+    else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+
+    // Release wake lock and remove listener
+    if(window._ritualWakeLock){window._ritualWakeLock.release().catch(()=>{});window._ritualWakeLock=null;}
+    if(window._ritualVisHandler){document.removeEventListener('visibilitychange',window._ritualVisHandler);window._ritualVisHandler=null;}
+    clearTimeout(window._keepAliveTimer);
+    if(window._noSleepVideo){window._noSleepVideo.pause();}
+
     document.getElementById('focus-timer-display').style.display='none';
+    orbitCanvas.style.display='none';
+    stopOrbitGlow();
     btn.textContent='Off';
     btn.style.color='var(--gold)';
-    // Offer to log this ritual to notes
-    setTimeout(offerRitualNote, 400);
+    setTimeout(offerRitualNote,400);
   }
+}
+
+// ── Orbiting glow animation — square breathing guide ──
+// Square breath: 4s inhale (top→right), 4s hold (right→bottom), 4s exhale (bottom→left), 4s hold (left→top)
+// Glow brightness indicates phase: bright=inhale/exhale, dim=hold
+let orbitFrame=null;
+function stopOrbitGlow(){if(orbitFrame){cancelAnimationFrame(orbitFrame);orbitFrame=null;}}
+function startOrbitGlow(canvas){
+  stopOrbitGlow();
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();
+  window.addEventListener('resize',resize);
+
+  const PHASE=4000; // 4s per phase
+  const CYCLE=PHASE*4; // 16s full square breath
+  const start=performance.now();
+
+  function draw(now){
+    const ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const altar=document.getElementById('altar');
+    if(!altar){orbitFrame=requestAnimationFrame(draw);return;}
+    const r=altar.getBoundingClientRect();
+    const cx=r.left+r.width/2;
+    const cy=r.top+r.height/2;
+    const radius=r.width/2;
+
+    const elapsed=(now-start)%CYCLE;
+    const phase=Math.floor(elapsed/PHASE); // 0=inhale,1=hold,2=exhale,3=hold
+    const phaseT=(elapsed%PHASE)/PHASE;    // 0→1 within current phase
+
+    // Angle: travels full circle over 16s, starting at top (-90°)
+    const angle=(elapsed/CYCLE)*Math.PI*2 - Math.PI/2;
+
+    // Glow intensity: bright during inhale(0) and exhale(2), dim during holds(1,3)
+    let glowIntensity;
+    if(phase===0) glowIntensity=0.3+phaseT*0.5;        // inhale: dim→bright
+    else if(phase===1) glowIntensity=0.8-phaseT*0.55;  // hold: bright→dim
+    else if(phase===2) glowIntensity=0.25+phaseT*0.5;  // exhale: dim→bright
+    else glowIntensity=0.75-phaseT*0.55;               // hold: bright→dim
+
+    // ── Subtle arc glow behind the ring ──
+    // Draw a soft glowing arc segment centred on the mote position
+    // rather than a visible dot — looks like light moving behind frosted glass
+    const arcSpan=Math.PI*0.35; // how wide the glow arc is
+    const innerR=radius-12;
+    const outerR=radius+12;
+
+    // Soft glow arc using multiple strokes of decreasing opacity
+    for(let i=4;i>=0;i--){
+      const spread=i*4;
+      const alpha=(glowIntensity*(0.06-i*0.01)).toFixed(3);
+      ctx.beginPath();
+      ctx.arc(cx,cy,radius-spread,angle-arcSpan,angle+arcSpan);
+      ctx.strokeStyle=`rgba(224,184,74,${alpha})`;
+      ctx.lineWidth=spread*2+4;
+      ctx.lineCap='round';
+      ctx.stroke();
+    }
+
+    // Core arc — the actual ring glow
+    ctx.beginPath();
+    ctx.arc(cx,cy,radius,angle-arcSpan*0.6,angle+arcSpan*0.6);
+    ctx.strokeStyle=`rgba(255,235,180,${(glowIntensity*0.25).toFixed(3)})`;
+    ctx.lineWidth=3;
+    ctx.lineCap='round';
+    ctx.stroke();
+
+    // Very subtle whole-ring ambient that breathes with intensity
+    ctx.beginPath();
+    ctx.arc(cx,cy,radius,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(224,184,74,${(glowIntensity*0.06).toFixed(3)})`;
+    ctx.lineWidth=8;
+    ctx.stroke();
+
+    orbitFrame=requestAnimationFrame(draw);
+  }
+  orbitFrame=requestAnimationFrame(draw);
+}
+
+// ── Singing bowl chime — padded mallet strike ──
+function singingBowl(actx,vol=0.4){
+  // Fundamental + harmonics of a glass singing bowl (~432Hz, ~864Hz, ~1350Hz)
+  const partials=[
+    {f:432,  gain:vol,      decay:6.0},
+    {f:864,  gain:vol*0.35, decay:3.5},
+    {f:1350, gain:vol*0.15, decay:2.0},
+    {f:2160, gain:vol*0.06, decay:1.2},
+  ];
+  partials.forEach(({f,gain,decay})=>{
+    const o=actx.createOscillator();
+    const g=actx.createGain();
+    // Padded mallet attack — soft, not sharp
+    g.gain.setValueAtTime(0,actx.currentTime);
+    g.gain.linearRampToValueAtTime(gain,actx.currentTime+0.06);
+    g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+decay);
+    o.frequency.value=f;
+    o.type='sine';
+    o.connect(g);g.connect(actx.destination);
+    o.start(actx.currentTime);
+    o.stop(actx.currentTime+decay+0.1);
+  });
 }
 function clearAltar(){if(!confirm('Release all objects from the altar?'))return;ST.zones={N:[],E:[],S:[],W:[],NE:[],SE:[],SW:[],NW:[],C:[]};renderZones();svSt();}
 function saveInt(){ST.intention=document.getElementById('ii').value;svSt();}
@@ -1870,8 +2061,20 @@ function setTimer(){
     if(timerSecs<=0){
       clearInterval(timerInterval);timerRunning=false;
       document.getElementById('timer-status').textContent='Done ✦';
-      // Ring the bowl 3 times
-      ping();setTimeout(ping,1500);setTimeout(ping,3000);
+      const fd=document.getElementById('focus-timer-display');
+      if(fd)fd.textContent='Done ✦';
+      // Singing bowl struck 3 times with increasing gap
+      const ac=getAC();
+      if(ac.state==='suspended')ac.resume().then(()=>{
+        singingBowl(ac,0.4);
+        setTimeout(()=>singingBowl(ac,0.35),2500);
+        setTimeout(()=>singingBowl(ac,0.28),5500);
+      });
+      else{
+        singingBowl(ac,0.4);
+        setTimeout(()=>singingBowl(ac,0.35),2500);
+        setTimeout(()=>singingBowl(ac,0.28),5500);
+      }
     }
   },1000);
 }
@@ -2068,22 +2271,23 @@ else{document.getElementById('penta-tog').textContent='Visible';}
 window.addEventListener('resize',()=>applyBd());
 
 // Touch drag
-let tdId=null,tdEl=null;
+let tdId=null,tdEl=null,touchActive=false;
 document.addEventListener('touchstart',e=>{
+  touchActive=true;
   const t=e.target.closest('.otile');
   if(t){tdId=t.id.replace('ot-','');tdEl=t;}
 });
 document.addEventListener('touchmove',e=>{
   if(tdId){
-    // Only prevent default if we're actually dragging to a zone, not scrolling the grid
     const t=e.target.closest('.ogrid');
     if(!t)e.preventDefault();
   }
 },{passive:false});
 document.addEventListener('touchend',e=>{
+  // Reset touchActive after click events have fired
+  setTimeout(()=>{touchActive=false;},300);
   if(!tdId)return;
   const touch=e.changedTouches[0];
-  // Temporarily hide the source tile so elementFromPoint finds the zone beneath
   if(tdEl)tdEl.style.pointerEvents='none';
   const el=document.elementFromPoint(touch.clientX,touch.clientY);
   if(tdEl)tdEl.style.pointerEvents='';
